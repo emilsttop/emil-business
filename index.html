@@ -733,7 +733,7 @@ nav.scrolled {
 .marquee-track {
   display: flex;
   gap: 0;
-  animation: marquee-scroll 18s linear infinite;
+  animation: marquee-scroll 24s linear infinite;
   width: max-content;
 }
 .marquee-wrap:hover .marquee-track { animation-play-state: paused; }
@@ -1632,7 +1632,18 @@ if (isTouch) {
     }, { passive: true });
     wrap.addEventListener('touchend', () => {
       if (swiping) {
-        setTimeout(() => { track.style.animation = ''; track.style.transform = ''; }, 400);
+        // Resume animation from current visual position so it doesn't snap to start
+        setTimeout(() => {
+          const W = track.scrollWidth / 3;
+          const pos = new DOMMatrix(getComputedStyle(track).transform).m41;
+          // Normalize into the animation cycle range [-2W, -W]
+          let cyclePos = pos > -W ? pos - W : pos;
+          // progress 0..1 within one cycle
+          const progress = Math.max(0, Math.min(1, (-cyclePos - W) / W));
+          track.style.animationDelay = `${-(progress * 24)}s`;
+          track.style.animation = '';
+          track.style.transform = '';
+        }, 1200); // longer pause so user can read before carousel resumes
       }
       swiping = false;
     });
