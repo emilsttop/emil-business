@@ -1651,16 +1651,22 @@ if (isTouch) {
         // Resume animation from current visual position so it doesn't snap to start
         const resumeAfterSwipe = () => {
           const W = track.scrollWidth / 3;
-          const pos = new DOMMatrix(getComputedStyle(track).transform).m41;
-          let cyclePos = pos > -W ? pos - W : pos;
-          const progress = Math.max(0, Math.min(1, (-cyclePos - W) / W));
+          let pos = new DOMMatrix(getComputedStyle(track).transform).m41;
+          // Normalize into animation range [-W, -2W] — copies are visually identical
+          while (pos > -W) pos -= W;
+          while (pos < -2 * W) pos += W;
+          const progress = Math.max(0, Math.min(0.9999, (-pos - W) / W));
+          // Move inline transform to normalized position (no visual change)
+          track.style.transform = `translateX(${pos}px)`;
           track.style.animationDelay = `${-(progress * 24)}s`;
-          track.style.animation = '';
-          track.style.transform = '';
-          // If a detail is open, immediately re-pause so carousel stays still
-          if (document.querySelector('.marquee-detail.open')) {
-            track.style.animationPlayState = 'paused';
-          }
+          track.style.animation = ''; // CSS animation starts; it overrides inline transform
+          // Remove inline transform in next frame — animation already controls it
+          requestAnimationFrame(() => {
+            track.style.transform = '';
+            if (document.querySelector('.marquee-detail.open')) {
+              track.style.animationPlayState = 'paused';
+            }
+          });
         };
         setTimeout(resumeAfterSwipe, 1200);
       }
