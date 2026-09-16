@@ -732,8 +732,8 @@ nav.scrolled {
 }
 .marquee-wrap:hover .marquee-track { animation-play-state: paused; }
 @keyframes marquee-scroll {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
+  from { transform: translateX(-33.333%); }
+  to   { transform: translateX(-66.667%); }
 }
 .marquee-item {
   display: inline-block;
@@ -1415,13 +1415,21 @@ document.querySelectorAll('.case-card').forEach(card => {
   card.addEventListener('mouseleave', () => card.classList.remove('open'));
 });
 
-// Marquee infinite loop: duplicate items
+// Marquee infinite loop: 3 copies (pre + original + post) for bidirectional infinite swipe
 document.querySelectorAll('.marquee-track').forEach(track => {
   const items = Array.from(track.children);
+  // Post-copy (right side, for leftward scroll)
   items.forEach(item => {
     const clone = item.cloneNode(true);
     clone.setAttribute('aria-hidden', 'true');
     track.appendChild(clone);
+  });
+  // Pre-copy (left side, for rightward scroll); insert before first original item
+  const firstOriginal = track.children[0];
+  items.forEach(item => {
+    const preclone = item.cloneNode(true);
+    preclone.setAttribute('aria-hidden', 'true');
+    track.insertBefore(preclone, firstOriginal);
   });
 });
 
@@ -1584,10 +1592,10 @@ if (isTouch) {
         track.style.transform = `translateX(${startOff}px)`;
       }
       if (swiping) {
-        const halfW = track.scrollWidth / 2;
+        const W = track.scrollWidth / 3; // one copy width
         const raw = startOff + (e.touches[0].clientX - startX);
-        // Clamp within one loop cycle so carousel feels infinite (no visible end)
-        const clamped = Math.max(-halfW, Math.min(0, raw));
+        // Allow range [-2W, 0]: pre-copy on right, post-copy on left, never blank
+        const clamped = Math.max(-2 * W, Math.min(0, raw));
         track.style.transform = `translateX(${clamped}px)`;
       }
     }, { passive: true });
