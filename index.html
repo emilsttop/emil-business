@@ -1036,6 +1036,31 @@ footer {
   .stat-cell:nth-child(odd) { border-right: 1px solid var(--border-faint); padding-right: 12px; }
   .stat-val { font-size: 32px; }
   .cases-top-row, .cases-mid-row, .cases-bot-row { grid-template-columns: 1fr; }
+  /* Скрываем mid/bot на мобиле до нажатия */
+  .cases-mid-row, .cases-bot-row { display: none; }
+  .cases-mid-row.cases-expanded, .cases-bot-row.cases-expanded { display: grid; }
+  /* Кнопка «Показать ещё» */
+  .cases-more-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    margin-top: 16px;
+    padding: 14px 0;
+    background: transparent;
+    border: 1px solid rgba(200,169,110,0.5);
+    color: var(--gold);
+    font-family: 'Jost', sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .cases-more-btn:active { background: rgba(200,169,110,0.08); }
+  .cases-more-btn.hidden { display: none; }
   #cases { padding: 0 4vw 56px; }
   .case-card { min-height: 220px; }
   /* Карусель: не ставить на паузу при тапе */
@@ -1200,6 +1225,7 @@ footer {
       <span class="case-open-hint">подробнее</span>
     </div>
   </div>
+  <button class="cases-more-btn" id="cases-more-btn">Показать ещё проекты →</button>
   <div class="cases-mid-row">
     <div class="case-card reveal" style="--card-bg-img: url('img/chaikhona.png')">
       <p class="case-niche">Операционка</p>
@@ -1610,6 +1636,15 @@ if (isTouch) {
       }
       swiping = false;
     });
+  });
+}
+
+// Mobile: «Показать ещё проекты»
+const caseMoreBtn = document.getElementById('cases-more-btn');
+if (caseMoreBtn) {
+  caseMoreBtn.addEventListener('click', () => {
+    document.querySelectorAll('.cases-mid-row, .cases-bot-row').forEach(r => r.classList.add('cases-expanded'));
+    caseMoreBtn.classList.add('hidden');
   });
 }
 </script>
