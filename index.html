@@ -1470,8 +1470,21 @@ document.querySelectorAll('.marquee-track').forEach(track => {
   const track = document.getElementById('marquee-' + group);
   const detail = document.getElementById('marquee-detail-' + group);
   if (!track || !detail) return;
-  function pauseTrack() { track.style.animationPlayState = 'paused'; }
-  function resumeTrack() { track.style.animationPlayState = ''; }
+  function pauseTrack() {
+    // Freeze at current pixel position — no animation restart flash
+    const pos = new DOMMatrix(getComputedStyle(track).transform).m41;
+    track.style.animation = 'none';
+    track.style.transform = `translateX(${pos}px)`;
+  }
+  function resumeTrack() {
+    const W = track.scrollWidth / 3;
+    const pos = new DOMMatrix(getComputedStyle(track).transform).m41;
+    let cyclePos = pos > -W ? pos - W : pos;
+    const progress = Math.max(0, Math.min(1, (-cyclePos - W) / W));
+    track.style.animationDelay = `${-(progress * 24)}s`;
+    track.style.animation = '';
+    track.style.transform = '';
+  }
   function closeDetail() {
     track.querySelectorAll('.marquee-item.active').forEach(a => a.classList.remove('active'));
     detail.classList.remove('open');
@@ -1482,7 +1495,7 @@ document.querySelectorAll('.marquee-track').forEach(track => {
     item.classList.add('active');
     detail.textContent = item.dataset.detail || '';
     detail.classList.add('open');
-    pauseTrack(); // stop carousel while description is visible
+    pauseTrack();
   }
   if (isTouch) {
     let tapX = 0, tapY = 0;
@@ -1510,10 +1523,7 @@ document.querySelectorAll('.marquee-track').forEach(track => {
   } else {
     track.querySelectorAll('.marquee-item').forEach(item => {
       item.addEventListener('mouseenter', () => showDetail(item));
-      item.addEventListener('mouseleave', () => {
-        item.classList.remove('active');
-        detail.classList.remove('open');
-      });
+      item.addEventListener('mouseleave', () => closeDetail());
     });
   }
 });
