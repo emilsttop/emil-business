@@ -973,6 +973,7 @@ footer {
   nav { padding: 16px 20px; }
   .nav-logo { font-size: 13px; }
   .nav-logo span { font-size: 9px; }
+  .nav-cta { padding: 7px 14px; font-size: 11px; gap: 5px; }
 
   /* Loader */
   .loader-name { font-size: clamp(18px, 5vw, 32px); letter-spacing: 0.07em; text-align: center; }
@@ -1039,8 +1040,13 @@ footer {
   .skills-inner { padding: 56px 4vw; }
   #cta { grid-template-columns: 1fr; gap: 32px; padding: 56px 4vw; }
   .cta-title { font-size: clamp(28px, 8vw, 40px); }
+  .cta-right { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; }
+  .cta-hint { border-left: none; padding-left: 0; white-space: nowrap; font-size: 12px; }
   .obj-inner { padding: 56px 4vw; }
-  footer { padding: 24px 4vw; flex-direction: column; align-items: flex-start; gap: 12px; }
+  footer { padding: 20px 4vw; flex-direction: column; align-items: flex-start; gap: 10px; }
+  .footer-links { gap: 16px; flex-direction: row; flex-wrap: wrap; }
+  .footer-links a { font-size: 11px; }
+  .footer-copy { font-size: 11px; }
 }
 
 @media (max-width: 480px) {
@@ -1343,7 +1349,7 @@ footer {
     <a class="btn-primary" href="https://t.me/EBorisovv" target="_blank" rel="noopener" style="font-size:14px;padding:18px 40px">
       Написать мне <span class="arrow">→</span>
     </a>
-    <p class="cta-hint">Без продаж.<br>Просто разговор.</p>
+    <p class="cta-hint">Без продаж. Просто разговор.</p>
   </div>
 </section>
 
@@ -1507,25 +1513,55 @@ counterBlocks.forEach(({ selector, nums }) => {
   });
 });
 
-// ── 3D CARD TILT ──────────────────────────────────────────
-document.querySelectorAll('.case-card').forEach(card => {
-  const isBig = card.classList.contains('big');
-  const deg = isBig ? 12 : 18;
-  card.addEventListener('mouseenter', () => {
-    card.style.transition = 'background 0.25s, box-shadow 0.15s ease';
+// ── 3D CARD TILT (только десктоп) ─────────────────────────
+const isTouch = ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
+if (!isTouch) {
+  document.querySelectorAll('.case-card').forEach(card => {
+    const isBig = card.classList.contains('big');
+    const deg = isBig ? 12 : 18;
+    card.addEventListener('mouseenter', () => {
+      card.style.transition = 'background 0.25s, box-shadow 0.15s ease';
+    });
+    card.addEventListener('mousemove', e => {
+      const r = card.getBoundingClientRect();
+      const x = (e.clientX - r.left) / r.width  - 0.5;
+      const y = (e.clientY - r.top)  / r.height - 0.5;
+      const sx = x * 24, sy = y * 14;
+      card.style.transform = `perspective(400px) rotateY(${x * deg}deg) rotateX(${-y * deg}deg) translateZ(16px)`;
+      card.style.boxShadow = `${-sx}px ${-sy}px 36px rgba(200,169,110,0.18)`;
+    });
+    card.addEventListener('mouseleave', () => {
+      card.style.transition = 'background 0.25s, transform 0.3s ease-out, box-shadow 0.3s ease';
+      card.style.transform = '';
+      card.style.boxShadow = '';
+    });
   });
-  card.addEventListener('mousemove', e => {
-    const r = card.getBoundingClientRect();
-    const x = (e.clientX - r.left) / r.width  - 0.5;
-    const y = (e.clientY - r.top)  / r.height - 0.5;
-    const sx = x * 24, sy = y * 14;
-    card.style.transform = `perspective(400px) rotateY(${x * deg}deg) rotateX(${-y * deg}deg) translateZ(16px)`;
-    card.style.boxShadow = `${-sx}px ${-sy}px 36px rgba(200,169,110,0.18)`;
-  });
-  card.addEventListener('mouseleave', () => {
-    card.style.transition = 'background 0.25s, transform 0.3s ease-out, box-shadow 0.3s ease';
-    card.style.transform = '';
-    card.style.boxShadow = '';
+}
+
+// ── MARQUEE SWIPE (мобиль) ────────────────────────────────
+document.querySelectorAll('.marquee-wrap').forEach(wrap => {
+  const track = wrap.querySelector('.marquee-track');
+  if (!track) return;
+  let startX = 0, startOff = 0, isDragging = false;
+  let currentOffset = 0;
+  wrap.addEventListener('touchstart', e => {
+    startX = e.touches[0].clientX;
+    const m = (track.style.transform || '').match(/translateX\((-?[\d.]+)px\)/);
+    startOff = m ? parseFloat(m[1]) : 0;
+    currentOffset = startOff;
+    isDragging = true;
+    track.style.animationPlayState = 'paused';
+    track.style.transition = 'none';
+  }, { passive: true });
+  wrap.addEventListener('touchmove', e => {
+    if (!isDragging) return;
+    const dx = e.touches[0].clientX - startX;
+    currentOffset = startOff + dx;
+    track.style.transform = `translateX(${currentOffset}px)`;
+  }, { passive: true });
+  wrap.addEventListener('touchend', () => {
+    isDragging = false;
+    track.style.animationPlayState = 'running';
   });
 });
 </script>
