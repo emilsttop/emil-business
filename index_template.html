@@ -1584,12 +1584,16 @@ if (isTouch) {
         track.style.transform = `translateX(${startOff}px)`;
       }
       if (swiping) {
-        track.style.transform = `translateX(${startOff + (e.touches[0].clientX - startX)}px)`;
+        const halfW = track.scrollWidth / 2;
+        const raw = startOff + (e.touches[0].clientX - startX);
+        // Clamp within one loop cycle so carousel feels infinite (no visible end)
+        const clamped = Math.max(-halfW, Math.min(0, raw));
+        track.style.transform = `translateX(${clamped}px)`;
       }
     }, { passive: true });
     wrap.addEventListener('touchend', () => {
       if (swiping) {
-        setTimeout(() => { track.style.animation = ''; track.style.transform = ''; }, 600);
+        setTimeout(() => { track.style.animation = ''; track.style.transform = ''; }, 400);
       }
       swiping = false;
     });
