@@ -1175,8 +1175,8 @@ footer {
       <p class="about-text reveal" style="transition-delay:.1s">
         <strong class="about-age">22 года</strong>
         Меня зовут Эмиль. Высшее IT-образование и <strong><span class="about-big-num">10+</span> проектов в совершенно разных нишах</strong>:
-        автомойки на 20&nbsp;млн, Telegram-приложение без аналогов в СНГ, офлайн-бизнес, маркетплейсы.
-        В каждой нише довожу дело до <strong>результата</strong> и <strong>закрываю задачи</strong> сам&nbsp;— без долгих вопросов и согласований.
+        автомойки на 20&nbsp;млн, Telegram-приложение без аналогов в СНГ, офлайн-бизнес.
+        В каждой нише довожу дело до <strong>результата</strong> и <strong>закрываю задачи сам</strong>&nbsp;— без долгих вопросов и согласований.
       </p>
       <p class="about-proof reveal" style="transition-delay:.2s">
         Это не просто слова. Дальше&nbsp;— <strong>конкретные проекты с цифрами</strong>.
@@ -1470,21 +1470,8 @@ document.querySelectorAll('.marquee-track').forEach(track => {
   const track = document.getElementById('marquee-' + group);
   const detail = document.getElementById('marquee-detail-' + group);
   if (!track || !detail) return;
-  function pauseTrack() {
-    // Freeze at current pixel position — no animation restart flash
-    const pos = new DOMMatrix(getComputedStyle(track).transform).m41;
-    track.style.animation = 'none';
-    track.style.transform = `translateX(${pos}px)`;
-  }
-  function resumeTrack() {
-    const W = track.scrollWidth / 3;
-    const pos = new DOMMatrix(getComputedStyle(track).transform).m41;
-    let cyclePos = pos > -W ? pos - W : pos;
-    const progress = Math.max(0, Math.min(1, (-cyclePos - W) / W));
-    track.style.animationDelay = `${-(progress * 24)}s`;
-    track.style.animation = '';
-    track.style.transform = '';
-  }
+  function pauseTrack() { track.style.animationPlayState = 'paused'; }
+  function resumeTrack() { track.style.animationPlayState = ''; }
   function closeDetail() {
     track.querySelectorAll('.marquee-item.active').forEach(a => a.classList.remove('active'));
     detail.classList.remove('open');
@@ -1670,7 +1657,7 @@ if (isTouch) {
           track.style.animation = '';
           track.style.transform = '';
           // If a detail is open, immediately re-pause so carousel stays still
-          if (detail && detail.classList.contains('open')) {
+          if (document.querySelector('.marquee-detail.open')) {
             track.style.animationPlayState = 'paused';
           }
         };
