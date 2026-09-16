@@ -1373,6 +1373,7 @@ footer {
 </footer>
 
 <script>
+const isTouch = ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
 if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 window.scrollTo(0, 0);
 window.addEventListener('pageshow', () => window.scrollTo(0, 0));
@@ -1540,7 +1541,6 @@ counterBlocks.forEach(({ selector, nums }) => {
 });
 
 // ── 3D CARD TILT (только десктоп) ─────────────────────────
-const isTouch = ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
 if (!isTouch) {
   document.querySelectorAll('.case-card').forEach(card => {
     const isBig = card.classList.contains('big');
