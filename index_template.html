@@ -1436,14 +1436,17 @@ document.querySelectorAll('.marquee-track').forEach(track => {
     detail.classList.add('open');
   }
   if (isTouch) {
-    // touchend с проверкой что это тап (не свайп) — надёжнее click на движущихся элементах
-    const wrap = track.closest('.marquee-wrap');
-    wrap.addEventListener('touchend', e => {
-      const touch = e.changedTouches[0];
-      const el = document.elementFromPoint(touch.clientX, touch.clientY);
-      const item = el && el.closest('.marquee-item');
+    let tapX = 0, tapY = 0;
+    track.addEventListener('touchstart', e => {
+      tapX = e.touches[0].clientX;
+      tapY = e.touches[0].clientY;
+    }, { passive: true });
+    track.addEventListener('touchend', e => {
+      const dx = Math.abs(e.changedTouches[0].clientX - tapX);
+      const dy = Math.abs(e.changedTouches[0].clientY - tapY);
+      if (dx > 12 || dy > 12) return;
+      const item = e.target.closest('.marquee-item');
       if (!item || item.getAttribute('aria-hidden') === 'true') return;
-      if (!item.dataset.detail) return;
       showDetail(item);
     });
   } else {
