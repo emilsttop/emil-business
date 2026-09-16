@@ -1469,11 +1469,19 @@ document.querySelectorAll('.marquee-track').forEach(track => {
   const track = document.getElementById('marquee-' + group);
   const detail = document.getElementById('marquee-detail-' + group);
   if (!track || !detail) return;
+  function pauseTrack() { track.style.animationPlayState = 'paused'; }
+  function resumeTrack() { track.style.animationPlayState = ''; }
+  function closeDetail() {
+    track.querySelectorAll('.marquee-item.active').forEach(a => a.classList.remove('active'));
+    detail.classList.remove('open');
+    resumeTrack();
+  }
   function showDetail(item) {
     track.querySelectorAll('.marquee-item.active').forEach(a => a.classList.remove('active'));
     item.classList.add('active');
     detail.textContent = item.dataset.detail || '';
     detail.classList.add('open');
+    pauseTrack(); // stop carousel while description is visible
   }
   if (isTouch) {
     let tapX = 0, tapY = 0;
@@ -1486,8 +1494,17 @@ document.querySelectorAll('.marquee-track').forEach(track => {
       const dy = Math.abs(e.changedTouches[0].clientY - tapY);
       if (dx > 12 || dy > 12) return;
       const item = e.target.closest('.marquee-item');
-      if (!item || item.getAttribute('aria-hidden') === 'true') return;
-      showDetail(item);
+      if (!item || item.getAttribute('aria-hidden') === 'true') {
+        // Tapped outside an item — close open description
+        if (detail.classList.contains('open')) closeDetail();
+        return;
+      }
+      if (item.classList.contains('active')) {
+        // Tapped same active item — close
+        closeDetail();
+      } else {
+        showDetail(item);
+      }
     });
   } else {
     track.querySelectorAll('.marquee-item').forEach(item => {
@@ -1633,17 +1650,20 @@ if (isTouch) {
     wrap.addEventListener('touchend', () => {
       if (swiping) {
         // Resume animation from current visual position so it doesn't snap to start
-        setTimeout(() => {
+        const resumeAfterSwipe = () => {
           const W = track.scrollWidth / 3;
           const pos = new DOMMatrix(getComputedStyle(track).transform).m41;
-          // Normalize into the animation cycle range [-2W, -W]
           let cyclePos = pos > -W ? pos - W : pos;
-          // progress 0..1 within one cycle
           const progress = Math.max(0, Math.min(1, (-cyclePos - W) / W));
           track.style.animationDelay = `${-(progress * 24)}s`;
           track.style.animation = '';
           track.style.transform = '';
-        }, 1200); // longer pause so user can read before carousel resumes
+          // If a detail is open, immediately re-pause so carousel stays still
+          if (detail && detail.classList.contains('open')) {
+            track.style.animationPlayState = 'paused';
+          }
+        };
+        setTimeout(resumeAfterSwipe, 1200);
       }
       swiping = false;
     });
