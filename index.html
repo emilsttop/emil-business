@@ -75,7 +75,7 @@ body {
   background: var(--gold);
   transform: scaleX(0);
   transform-origin: left;
-  animation: loader-bar-fill 1.1s linear 0.1s forwards;
+  animation: loader-bar-fill 2.4s linear 0.1s forwards;
 }
 @keyframes loader-bar-fill {
   0%   { transform: scaleX(0); }
@@ -1032,6 +1032,8 @@ footer {
   .cases-top-row, .cases-mid-row, .cases-bot-row { grid-template-columns: 1fr; }
   #cases { padding: 0 4vw 56px; }
   .case-card { min-height: 220px; }
+  /* Карусель: не ставить на паузу при тапе */
+  .marquee-wrap:hover .marquee-track { animation-play-state: running; }
   /* На мобиле фото карточки показывать всегда (нет hover) */
   .case-card::after { opacity: 0.85; }
   .case-card .case-niche,
@@ -1434,10 +1436,14 @@ document.querySelectorAll('.marquee-track').forEach(track => {
     detail.classList.add('open');
   }
   if (isTouch) {
-    // click не срабатывает во время свайпа — идеально для разделения
-    track.addEventListener('click', e => {
-      const item = e.target.closest('.marquee-item');
+    // touchend с проверкой что это тап (не свайп) — надёжнее click на движущихся элементах
+    const wrap = track.closest('.marquee-wrap');
+    wrap.addEventListener('touchend', e => {
+      const touch = e.changedTouches[0];
+      const el = document.elementFromPoint(touch.clientX, touch.clientY);
+      const item = el && el.closest('.marquee-item');
       if (!item || item.getAttribute('aria-hidden') === 'true') return;
+      if (!item.dataset.detail) return;
       showDetail(item);
     });
   } else {
