@@ -1109,8 +1109,6 @@ footer {
 
 <!-- LOADER -->
 <div id="loader">
-  <p class="loader-name">Эмиль <em>—</em> Бизнес-ассистент</p>
-  <div class="loader-bar-wrap"><div class="loader-bar"></div></div>
   <span class="loader-sub">Загрузка</span>
 </div>
 
@@ -1412,8 +1410,7 @@ window.scrollTo(0, 0);
 window.addEventListener('pageshow', () => window.scrollTo(0, 0));
 const loaderEl = document.getElementById('loader');
 function hideLoader() {
-  // минимум 1.8с чтобы анимация бара успела дойти до конца
-  setTimeout(() => loaderEl.classList.add('hidden'), 1800);
+  setTimeout(() => loaderEl.classList.add('hidden'), 600);
 }
 const heroBgImg = document.querySelector('.hero-bg-main');
 if (heroBgImg && !heroBgImg.complete) {
