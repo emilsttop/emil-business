@@ -389,6 +389,21 @@ nav.scrolled {
 @media (hover: none), (max-width: 767px) {
   #btn-ripple-overlay { display: none !important; }
 }
+#btn-ripple-ghost {
+  position: fixed;
+  display: none;
+  align-items: center; justify-content: center; gap: 10px;
+  background: var(--gold); color: #0A0A0A;
+  font-family: 'Jost', sans-serif;
+  font-size: 13px; font-weight: 500;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  text-decoration: none; cursor: pointer;
+  pointer-events: auto;
+  z-index: 202;
+  transition: background 0.25s, color 0.25s;
+}
+#btn-ripple-ghost:hover { background: #e8c880; }
+#btn-ripple-overlay.active #btn-ripple-ghost { display: flex; }
 
 /* ── SECTION BASE ───────────────────────────────────────── */
 .section-divider { border-top: 1px solid var(--border-faint); }
@@ -1159,6 +1174,7 @@ footer {
 <div id="btn-ripple-overlay">
   <div id="btn-ripple-circle"></div>
   <p id="btn-ripple-text">Тратить меньше.<br>Получать больше.<br>Вы уверены, что хотите этого?</p>
+  <a id="btn-ripple-ghost" href="#" target="_blank" rel="noopener"></a>
 </div>
 
 <!-- LOADER -->
@@ -1579,6 +1595,7 @@ document.querySelectorAll('.tl-item').forEach(el => tlObserver.observe(el));
 (function() {
   const rippleOverlay = document.getElementById('btn-ripple-overlay');
   const rippleCircle = document.getElementById('btn-ripple-circle');
+  const rippleGhost = document.getElementById('btn-ripple-ghost');
   if (!rippleOverlay) return;
   document.querySelectorAll('.btn-primary, .nav-cta').forEach(btn => {
     btn.addEventListener('mouseenter', () => {
@@ -1586,11 +1603,20 @@ document.querySelectorAll('.tl-item').forEach(el => tlObserver.observe(el));
       const rect = btn.getBoundingClientRect();
       rippleCircle.style.left = (rect.left + rect.width / 2 - 5) + 'px';
       rippleCircle.style.top = (rect.top + rect.height / 2 - 5) + 'px';
+      rippleGhost.style.left = rect.left + 'px';
+      rippleGhost.style.top = rect.top + 'px';
+      rippleGhost.style.width = rect.width + 'px';
+      rippleGhost.style.height = rect.height + 'px';
+      rippleGhost.innerHTML = btn.innerHTML;
+      rippleGhost.href = btn.href || '#';
       rippleOverlay.classList.add('active');
     });
     btn.addEventListener('mouseleave', () => {
       rippleOverlay.classList.remove('active');
     });
+  });
+  rippleGhost.addEventListener('mouseleave', () => {
+    rippleOverlay.classList.remove('active');
   });
 })();
 
