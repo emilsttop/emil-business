@@ -142,6 +142,7 @@ nav.scrolled {
   letter-spacing: 0.12em; text-transform: uppercase;
   text-decoration: none;
   transition: background 0.25s, color 0.25s;
+  position: relative; z-index: 201;
 }
 .nav-cta:hover { background: #F5F5F5; color: #0A0A0A; border-color: #F5F5F5; }
 
@@ -333,6 +334,7 @@ nav.scrolled {
   text-decoration: none; border: none; cursor: pointer;
   transition: background 0.25s, color 0.25s, transform 0.2s;
   align-self: flex-start;
+  position: relative; z-index: 201;
 }
 .btn-primary:hover { background: #F5F5F5; color: #0A0A0A; transform: translateY(-1px); }
 .btn-primary .arrow { font-size: 16px; }
@@ -383,6 +385,9 @@ nav.scrolled {
 }
 #btn-ripple-overlay.active #btn-ripple-text {
   opacity: 1; transform: translateY(0);
+}
+@media (hover: none), (max-width: 767px) {
+  #btn-ripple-overlay { display: none !important; }
 }
 
 /* ── SECTION BASE ───────────────────────────────────────── */
@@ -1572,22 +1577,20 @@ document.querySelectorAll('.tl-item').forEach(el => tlObserver.observe(el));
 
 // ── BUTTON RIPPLE EFFECT ─────────────────────────────────
 (function() {
-  const btnHero = document.querySelector('.btn-hero');
   const rippleOverlay = document.getElementById('btn-ripple-overlay');
   const rippleCircle = document.getElementById('btn-ripple-circle');
-  if (!btnHero || !rippleOverlay) return;
-  btnHero.addEventListener('mouseenter', () => {
-    const rect = btnHero.getBoundingClientRect();
-    const cx = rect.left + rect.width / 2;
-    const cy = rect.top + rect.height / 2;
-    rippleCircle.style.left = cx + 'px';
-    rippleCircle.style.top = cy + 'px';
-    rippleCircle.style.marginLeft = '-5px';
-    rippleCircle.style.marginTop = '-5px';
-    rippleOverlay.classList.add('active');
-  });
-  btnHero.addEventListener('mouseleave', () => {
-    rippleOverlay.classList.remove('active');
+  if (!rippleOverlay) return;
+  document.querySelectorAll('.btn-primary, .nav-cta').forEach(btn => {
+    btn.addEventListener('mouseenter', () => {
+      if (window.matchMedia('(hover: none)').matches) return;
+      const rect = btn.getBoundingClientRect();
+      rippleCircle.style.left = (rect.left + rect.width / 2 - 5) + 'px';
+      rippleCircle.style.top = (rect.top + rect.height / 2 - 5) + 'px';
+      rippleOverlay.classList.add('active');
+    });
+    btn.addEventListener('mouseleave', () => {
+      rippleOverlay.classList.remove('active');
+    });
   });
 })();
 
