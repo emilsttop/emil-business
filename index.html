@@ -121,7 +121,17 @@ nav.scrolled {
   transition: color 0.25s;
 }
 .nav-logo:hover { color: var(--gold); }
-.nav-logo:hover span { color: var(--text); }
+.nav-center {
+  position: absolute;
+  left: 50%; transform: translateX(-50%);
+  font-family: 'Jost', sans-serif;
+  font-size: 13px; font-weight: 600;
+  letter-spacing: 0.28em; text-transform: uppercase;
+  color: var(--gold);
+  white-space: nowrap;
+  pointer-events: none;
+  text-shadow: 0 0 20px rgba(200,169,110,0.5);
+}
 .nav-cta {
   display: inline-flex; align-items: center; gap: 8px;
   padding: 10px 22px;
@@ -259,6 +269,7 @@ nav.scrolled {
   text-shadow: 0 2px 32px rgba(10,10,10,1), 0 0 60px rgba(10,10,10,0.9);
 }
 .hero-title em { font-style: italic; color: var(--gold); display: block; }
+.hero-gold-word { color: var(--gold); font-style: italic; }
 
 /* Right column — hidden, content merged into left */
 .hero-right { display: none; }
@@ -337,6 +348,41 @@ nav.scrolled {
   box-shadow: 0 0 40px rgba(245,245,245,0.4), 0 0 80px rgba(245,245,245,0.2);
   opacity: 1;
   transform: translateY(-2px);
+}
+
+/* ── RIPPLE OVERLAY ─────────────────────────────────────── */
+#btn-ripple-overlay {
+  position: fixed; inset: 0; z-index: 200;
+  pointer-events: none;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+}
+#btn-ripple-circle {
+  position: absolute;
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: #ffffff;
+  transform: scale(0);
+  transition: transform 0.75s cubic-bezier(0.22,1,0.36,1);
+}
+#btn-ripple-text {
+  position: relative; z-index: 1;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(26px, 3.5vw, 48px);
+  font-weight: 300;
+  color: #0A0A0A;
+  text-align: center;
+  line-height: 1.4;
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.3s ease 0.45s, transform 0.3s ease 0.45s;
+  max-width: 680px; padding: 0 40px;
+}
+#btn-ripple-overlay.active #btn-ripple-circle {
+  transform: scale(320);
+}
+#btn-ripple-overlay.active #btn-ripple-text {
+  opacity: 1; transform: translateY(0);
 }
 
 /* ── SECTION BASE ───────────────────────────────────────── */
@@ -1105,6 +1151,10 @@ footer {
 <body>
 
 <div id="spotlight"></div>
+<div id="btn-ripple-overlay">
+  <div id="btn-ripple-circle"></div>
+  <p id="btn-ripple-text">Тратить меньше.<br>Получать больше.<br>Вы уверены, что хотите этого?</p>
+</div>
 
 <!-- LOADER -->
 <div id="loader">
@@ -1114,7 +1164,8 @@ footer {
 
 <!-- NAV -->
 <nav id="nav">
-  <a class="nav-logo" href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Эмиль <span>— БИЗНЕС-АССИСТЕНТ</span></a>
+  <a class="nav-logo" href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Эмиль</a>
+  <span class="nav-center">Бизнес-ассистент</span>
   <a class="nav-cta" href="https://t.me/EBorisovv" target="_blank" rel="noopener">
     Написать мне →
   </a>
@@ -1132,22 +1183,21 @@ footer {
       <div class="hero-middle">
         <div>
           <h1 class="hero-title reveal" style="transition-delay:.1s">
-            Бизнес-ассистент,<br>
-            цель которого&nbsp;—<br>
-            увеличение<br>
-            <em>Вашей чистой<br>прибыли</em>
+            Моя цель&nbsp;—<br>
+            <span class="hero-gold-word">увеличение</span><br>
+            <span class="hero-gold-word">Вашей</span> чистой<br>
+            <span class="hero-gold-word">прибыли</span>
           </h1>
-          <p class="hero-statement reveal" style="transition-delay:.15s">Это всё.</p>
+          <p class="hero-sub reveal" style="transition-delay:.2s;margin-top:28px;line-height:1.8">
+            Не закрытые задачи,<br>
+            не отработанное время,<br>
+            не красивые отчёты.<br>
+            <em>Именно прибыль.</em>
+          </p>
         </div>
       </div>
 
       <div class="hero-bottom">
-        <p class="hero-sub reveal" style="transition-delay:.2s">
-          Не закрытые задачи,<br>
-          не отработанное время,<br>
-          не красивые отчёты.<br>
-          <em>Именно прибыль.</em>
-        </p>
         <div class="hero-bottom-cta">
           <a class="btn-primary btn-hero reveal" href="https://t.me/EBorisovv" target="_blank" rel="noopener" style="transition-delay:.3s">
             Написать мне <span class="arrow">→</span>
@@ -1161,7 +1211,7 @@ footer {
 
   <!-- "Под эту цель" — справа на фото, на половине высоты экрана -->
   <p class="hero-photo-caption reveal" style="transition-delay:.25s">
-    <em>«Самостоятельно подбираю инструменты<br>и беру на себя всё, что мешает вам фокусироваться.»</em>
+    <em>«Самостоятельно подбираю инструменты<br>и беру на себя всё, что мешает Вам фокусироваться.»</em>
   </p>
 </div>
 
@@ -1388,7 +1438,7 @@ footer {
   </div>
   <div class="cta-right reveal" style="transition-delay:.15s">
     <a class="btn-primary" href="https://t.me/EBorisovv" target="_blank" rel="noopener" style="font-size:14px;padding:18px 40px">
-      Написать мне <span class="arrow">→</span>
+      Написать мне* <span class="arrow">→</span>
     </a>
     <p class="cta-hint">*Возможно одно из лучших решений в Вашей жизни</p>
   </div>
@@ -1519,6 +1569,27 @@ const tlObserver = new IntersectionObserver(entries => {
   entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
 }, { threshold: 0.2 });
 document.querySelectorAll('.tl-item').forEach(el => tlObserver.observe(el));
+
+// ── BUTTON RIPPLE EFFECT ─────────────────────────────────
+(function() {
+  const btnHero = document.querySelector('.btn-hero');
+  const rippleOverlay = document.getElementById('btn-ripple-overlay');
+  const rippleCircle = document.getElementById('btn-ripple-circle');
+  if (!btnHero || !rippleOverlay) return;
+  btnHero.addEventListener('mouseenter', () => {
+    const rect = btnHero.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    rippleCircle.style.left = cx + 'px';
+    rippleCircle.style.top = cy + 'px';
+    rippleCircle.style.marginLeft = '-5px';
+    rippleCircle.style.marginTop = '-5px';
+    rippleOverlay.classList.add('active');
+  });
+  btnHero.addEventListener('mouseleave', () => {
+    rippleOverlay.classList.remove('active');
+  });
+})();
 
 // ── CURSOR SPOTLIGHT ─────────────────────────────────────
 const spotlight = document.getElementById('spotlight');
