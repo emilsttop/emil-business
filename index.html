@@ -710,7 +710,7 @@ nav.scrolled {
 }
 
 /* ── PARALLAX HERO PHOTO ────────────────────────────────── */
-.hero-bg-main { will-change: transform; transform: scale(1.08); transform-origin: center top; }
+.hero-bg-main { will-change: transform; transform: scale(1.08); transform-origin: center top; backface-visibility: hidden; }
 
 /* Skills section-label styled like about */
 .skills-section-label {
@@ -1533,10 +1533,21 @@ document.addEventListener('mouseleave', () => { spotlight.style.opacity = '0'; }
 // ── PARALLAX HERO PHOTO ──────────────────────────────────
 const heroBg = document.querySelector('.hero-bg-main');
 if (heroBg) {
+  let currentY = 0, targetY = 0, rafId = null;
+  const updateParallax = () => {
+    currentY += (targetY - currentY) * 0.12;
+    heroBg.style.transform = `translateY(${currentY}px) scale(1.08)`;
+    if (Math.abs(targetY - currentY) > 0.1) {
+      rafId = requestAnimationFrame(updateParallax);
+    } else {
+      rafId = null;
+    }
+  };
   window.addEventListener('scroll', () => {
     const y = window.scrollY;
     if (y < window.innerHeight * 1.5) {
-      heroBg.style.transform = `translateY(${y * 0.38}px) scale(1.08)`;
+      targetY = y * 0.38;
+      if (!rafId) rafId = requestAnimationFrame(updateParallax);
     }
   }, { passive: true });
 }
