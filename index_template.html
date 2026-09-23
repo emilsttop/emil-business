@@ -381,17 +381,18 @@ nav.scrolled {
   font-size: clamp(26px, 3.5vw, 48px);
   font-weight: 300;
   color: #0A0A0A;
-  text-align: center;
   line-height: 1.4;
   opacity: 0;
-  transform: translateY(16px);
-  transition: opacity 0.35s ease 0.45s, transform 0.35s ease 0.45s;
-  max-width: 680px; padding: 0 40px;
-  left: 50%; margin-left: -340px;
+  transform: translateY(12px);
+  /* OUT: instant — disappears with background */
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  max-width: 600px; padding: 0 48px;
   pointer-events: none;
 }
 #btn-ripple-overlay.active #btn-ripple-text {
   opacity: 1; transform: translateY(0);
+  /* IN: delayed until background fills */
+  transition: opacity 0.35s ease 0.4s, transform 0.35s ease 0.4s;
 }
 @media (hover: none), (max-width: 767px) {
   #btn-ripple-overlay { display: none !important; }
@@ -1607,22 +1608,40 @@ document.querySelectorAll('.tl-item').forEach(el => tlObserver.observe(el));
 
   const rippleText = document.getElementById('btn-ripple-text');
 
+  function positionText(btn) {
+    const vh = window.innerHeight;
+    const textH = 180; // approx text block height
+    const midTop = Math.round(vh / 2 - textH / 2);
+
+    // Reset
+    rippleText.style.left = '';
+    rippleText.style.right = '';
+    rippleText.style.top = midTop + 'px';
+
+    if (btn.classList.contains('nav-cta')) {
+      // Nav button → text centered horizontally and vertically
+      rippleText.style.left = '50%';
+      rippleText.style.marginLeft = '-300px';
+      rippleText.style.textAlign = 'center';
+    } else if (btn.classList.contains('btn-hero')) {
+      // Hero button → right side, vertically centered
+      rippleText.style.right = '6vw';
+      rippleText.style.marginLeft = '0';
+      rippleText.style.textAlign = 'right';
+    } else {
+      // Final CTA button → left side, vertically centered
+      rippleText.style.left = '6vw';
+      rippleText.style.marginLeft = '0';
+      rippleText.style.textAlign = 'left';
+    }
+  }
+
   function showRipple(btn) {
     if (window.matchMedia('(hover: none)').matches) return;
     activeBtn = btn;
     const rect = btn.getBoundingClientRect();
-    const btnCenterY = rect.top + rect.height / 2;
-    const vh = window.innerHeight;
 
-    // Place text in the half that has more space away from the button
-    const textH = 180; // approx height of text block
-    if (btnCenterY > vh / 2) {
-      // button in lower half → text in upper quarter
-      rippleText.style.top = Math.max(40, vh * 0.2 - textH / 2) + 'px';
-    } else {
-      // button in upper half → text in lower quarter
-      rippleText.style.top = Math.min(vh - textH - 40, vh * 0.65) + 'px';
-    }
+    positionText(btn);
 
     rippleCircle.style.left = (rect.left + rect.width / 2 - 5) + 'px';
     rippleCircle.style.top  = (rect.top  + rect.height / 2 - 5) + 'px';
