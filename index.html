@@ -352,14 +352,6 @@ nav.scrolled {
   transform: translateY(-2px);
 }
 
-/* ── HERO DECO LINES ────────────────────────────────────── */
-.hero-deco-svg {
-  position: absolute; inset: 0;
-  width: 100%; height: 100%;
-  z-index: 1; pointer-events: none;
-  overflow: visible;
-}
-@media (max-width: 767px) { .hero-deco-svg { display: none; } }
 
 /* ── RIPPLE OVERLAY ─────────────────────────────────────── */
 #btn-ripple-overlay {
@@ -1228,96 +1220,6 @@ footer {
     <div class="hero-bg-overlay"></div>
   </div>
 
-  <!-- Decorative gold lines -->
-  <svg class="hero-deco-svg" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-    <defs>
-      <!-- Line A1: bottom-left → upper-right, bright beam -->
-      <linearGradient id="hd-g1" x1="0" y1="900" x2="1080" y2="140" gradientUnits="userSpaceOnUse">
-        <stop offset="0%"   stop-color="#C8A96E" stop-opacity="0"/>
-        <stop offset="6%"   stop-color="#EDD280" stop-opacity="0.55"/>
-        <stop offset="35%"  stop-color="#F5E0A0" stop-opacity="0.92"/>
-        <stop offset="52%"  stop-color="#EDD280" stop-opacity="0.60"/>
-        <stop offset="72%"  stop-color="#C8A96E" stop-opacity="0.70"/>
-        <stop offset="92%"  stop-color="#C8A96E" stop-opacity="0.20"/>
-        <stop offset="100%" stop-color="#C8A96E" stop-opacity="0"/>
-      </linearGradient>
-      <!-- Line A2: parallel, slightly offset, softer -->
-      <linearGradient id="hd-g2" x1="0" y1="900" x2="1200" y2="280" gradientUnits="userSpaceOnUse">
-        <stop offset="0%"   stop-color="#C8A96E" stop-opacity="0"/>
-        <stop offset="8%"   stop-color="#C8A96E" stop-opacity="0.30"/>
-        <stop offset="42%"  stop-color="#D4B87A" stop-opacity="0.55"/>
-        <stop offset="70%"  stop-color="#C8A96E" stop-opacity="0.35"/>
-        <stop offset="100%" stop-color="#C8A96E" stop-opacity="0"/>
-      </linearGradient>
-      <!-- Line C1: bottom-right → upper-left, bright beam -->
-      <linearGradient id="hd-g3" x1="1440" y1="900" x2="460" y2="110" gradientUnits="userSpaceOnUse">
-        <stop offset="0%"   stop-color="#C8A96E" stop-opacity="0"/>
-        <stop offset="6%"   stop-color="#EDD280" stop-opacity="0.55"/>
-        <stop offset="35%"  stop-color="#F5E0A0" stop-opacity="0.92"/>
-        <stop offset="52%"  stop-color="#EDD280" stop-opacity="0.60"/>
-        <stop offset="72%"  stop-color="#C8A96E" stop-opacity="0.70"/>
-        <stop offset="92%"  stop-color="#C8A96E" stop-opacity="0.20"/>
-        <stop offset="100%" stop-color="#C8A96E" stop-opacity="0"/>
-      </linearGradient>
-      <!-- Line C2: parallel, softer -->
-      <linearGradient id="hd-g4" x1="1440" y1="900" x2="320" y2="300" gradientUnits="userSpaceOnUse">
-        <stop offset="0%"   stop-color="#C8A96E" stop-opacity="0"/>
-        <stop offset="8%"   stop-color="#C8A96E" stop-opacity="0.30"/>
-        <stop offset="42%"  stop-color="#D4B87A" stop-opacity="0.55"/>
-        <stop offset="70%"  stop-color="#C8A96E" stop-opacity="0.35"/>
-        <stop offset="100%" stop-color="#C8A96E" stop-opacity="0"/>
-      </linearGradient>
-      <filter id="hd-glow">
-        <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur"/>
-        <feMerge><feMergeNode in="blur"/><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-      </filter>
-      <filter id="hd-glow-soft">
-        <feGaussianBlur in="SourceGraphic" stdDeviation="8" result="blur"/>
-        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-      </filter>
-    </defs>
-
-    <!-- Line A1: wide atmospheric glow -->
-    <line x1="0" y1="900" x2="1080" y2="140" stroke="url(#hd-g1)" stroke-width="40" filter="url(#hd-glow-soft)" opacity="0.35"/>
-    <!-- Line A1: medium glow -->
-    <line x1="0" y1="900" x2="1080" y2="140" stroke="url(#hd-g1)" stroke-width="8" opacity="0.55"/>
-    <!-- Line A1: sharp core -->
-    <line x1="0" y1="900" x2="1080" y2="140" stroke="url(#hd-g1)" stroke-width="1.5" filter="url(#hd-glow)"/>
-
-    <!-- Line A2: parallel softer -->
-    <line x1="0" y1="900" x2="1200" y2="280" stroke="url(#hd-g2)" stroke-width="12" opacity="0.30"/>
-    <line x1="0" y1="900" x2="1200" y2="280" stroke="url(#hd-g2)" stroke-width="1"/>
-
-    <!-- Line C1: wide atmospheric glow -->
-    <line x1="1440" y1="900" x2="460" y2="110" stroke="url(#hd-g3)" stroke-width="40" filter="url(#hd-glow-soft)" opacity="0.35"/>
-    <!-- Line C1: medium glow -->
-    <line x1="1440" y1="900" x2="460" y2="110" stroke="url(#hd-g3)" stroke-width="8" opacity="0.55"/>
-    <!-- Line C1: sharp core -->
-    <line x1="1440" y1="900" x2="460" y2="110" stroke="url(#hd-g3)" stroke-width="1.5" filter="url(#hd-glow)"/>
-
-    <!-- Line C2: parallel softer -->
-    <line x1="1440" y1="900" x2="320" y2="300" stroke="url(#hd-g4)" stroke-width="12" opacity="0.30"/>
-    <line x1="1440" y1="900" x2="320" y2="300" stroke="url(#hd-g4)" stroke-width="1"/>
-
-    <!-- Horizontal eye-level accent line -->
-    <line x1="55" y1="394" x2="722" y2="394" stroke="#C8A96E" stroke-width="1" opacity="0.40"/>
-
-    <!-- Gold spark / 4-pointed star at left edge, eye level -->
-    <g filter="url(#hd-glow)">
-      <line x1="20" y1="394" x2="50" y2="394" stroke="#F5E0A0" stroke-width="2" opacity="0.95"/>
-      <line x1="35" y1="379" x2="35" y2="409" stroke="#F5E0A0" stroke-width="2" opacity="0.95"/>
-      <line x1="26" y1="383" x2="44" y2="405" stroke="#EDD280" stroke-width="1.2" opacity="0.65"/>
-      <line x1="44" y1="383" x2="26" y2="405" stroke="#EDD280" stroke-width="1.2" opacity="0.65"/>
-    </g>
-
-    <!-- Small eye reticle (camera focus bracket) around right eye -->
-    <g stroke="#EDD280" stroke-width="1.5" fill="none" opacity="0.80">
-      <polyline points="728,374 728,386 740,386"/>
-      <polyline points="776,374 776,386 764,386"/>
-      <polyline points="728,414 728,402 740,402"/>
-      <polyline points="776,414 776,402 764,402"/>
-    </g>
-  </svg>
 
   <div class="hero-body">
     <div class="hero-left">
