@@ -363,12 +363,20 @@ nav.scrolled {
   position: absolute;
   width: 10px; height: 10px;
   border-radius: 50%;
-  background: #ffffff;
+  background: #C8A96E;
   transform: scale(0);
   transition: transform 0.75s cubic-bezier(0.22,1,0.36,1);
 }
+#btn-ripple-overlay.active #btn-ripple-circle {
+  animation: ripple-gold-to-white 0.85s cubic-bezier(0.22,1,0.36,1) forwards;
+}
+@keyframes ripple-gold-to-white {
+  0%   { transform: scale(0);   background: #C8A96E; }
+  35%  { transform: scale(120); background: #C8A96E; }
+  100% { transform: scale(320); background: #ffffff; }
+}
 #btn-ripple-text {
-  position: relative; z-index: 1;
+  position: fixed; z-index: 201;
   font-family: 'Cormorant Garamond', serif;
   font-size: clamp(26px, 3.5vw, 48px);
   font-weight: 300;
@@ -377,11 +385,10 @@ nav.scrolled {
   line-height: 1.4;
   opacity: 0;
   transform: translateY(16px);
-  transition: opacity 0.3s ease 0.45s, transform 0.3s ease 0.45s;
+  transition: opacity 0.35s ease 0.45s, transform 0.35s ease 0.45s;
   max-width: 680px; padding: 0 40px;
-}
-#btn-ripple-overlay.active #btn-ripple-circle {
-  transform: scale(320);
+  left: 50%; margin-left: -340px;
+  pointer-events: none;
 }
 #btn-ripple-overlay.active #btn-ripple-text {
   opacity: 1; transform: translateY(0);
@@ -1598,10 +1605,25 @@ document.querySelectorAll('.tl-item').forEach(el => tlObserver.observe(el));
   if (!rippleOverlay) return;
   let activeBtn = null;
 
+  const rippleText = document.getElementById('btn-ripple-text');
+
   function showRipple(btn) {
     if (window.matchMedia('(hover: none)').matches) return;
     activeBtn = btn;
     const rect = btn.getBoundingClientRect();
+    const btnCenterY = rect.top + rect.height / 2;
+    const vh = window.innerHeight;
+
+    // Place text in the half that has more space away from the button
+    const textH = 180; // approx height of text block
+    if (btnCenterY > vh / 2) {
+      // button in lower half → text in upper quarter
+      rippleText.style.top = Math.max(40, vh * 0.2 - textH / 2) + 'px';
+    } else {
+      // button in upper half → text in lower quarter
+      rippleText.style.top = Math.min(vh - textH - 40, vh * 0.65) + 'px';
+    }
+
     rippleCircle.style.left = (rect.left + rect.width / 2 - 5) + 'px';
     rippleCircle.style.top  = (rect.top  + rect.height / 2 - 5) + 'px';
     rippleGhost.style.left   = rect.left + 'px';
