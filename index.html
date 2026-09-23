@@ -1648,11 +1648,8 @@ document.querySelectorAll('.tl-item').forEach(el => tlObserver.observe(el));
       rippleText.style.right = '6vw';
       rippleText.style.textAlign = 'right';
     } else {
-      // Final CTA button → above if room, otherwise below
-      const aboveTop = rect.top - textH - gap;
-      const belowTop = rect.bottom + gap;
-      const top = aboveTop >= 40 ? aboveTop : Math.min(belowTop, vh - textH - 20);
-      rippleText.style.top = Math.max(40, top) + 'px';
+      // Final CTA button is at bottom of page — always put text in upper area
+      rippleText.style.top = Math.round(vh * 0.18) + 'px';
       rippleText.style.left = '6vw';
       rippleText.style.textAlign = 'left';
     }
