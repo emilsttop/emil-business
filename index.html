@@ -1728,24 +1728,24 @@ document.querySelectorAll('.tl-item').forEach(el => tlObserver.observe(el));
     const vh = window.innerHeight;
     const rect = btn.getBoundingClientRect();
     const textH = 220;
+    const gap = 52;
 
     rippleText.style.left = '';
     rippleText.style.right = '';
     rippleText.style.marginLeft = '';
 
     if (btn.classList.contains('nav-cta')) {
-      rippleText.style.top = Math.round(vh / 2 - textH / 2) + 'px';
+      // Nav button is top-right; put text in lower half to stay clear of ghost
+      rippleText.style.top = Math.round(vh * 0.55) + 'px';
       rippleText.style.left = '50%';
       rippleText.style.marginLeft = '-300px';
       rippleText.style.textAlign = 'center';
-    } else if (btn.classList.contains('btn-hero')) {
-      rippleText.style.top = Math.round(vh / 2 - textH / 2) + 'px';
-      rippleText.style.right = '6vw';
-      rippleText.style.textAlign = 'right';
     } else {
-      // Final CTA button → position text above the button with a gap
-      const topPos = Math.round(rect.top - textH - 48);
-      rippleText.style.top = Math.max(60, topPos) + 'px';
+      // Final CTA button → above if room, otherwise below
+      const aboveTop = rect.top - textH - gap;
+      const belowTop = rect.bottom + gap;
+      const top = aboveTop >= 40 ? aboveTop : Math.min(belowTop, vh - textH - 20);
+      rippleText.style.top = Math.max(40, top) + 'px';
       rippleText.style.left = '6vw';
       rippleText.style.textAlign = 'left';
     }
@@ -1781,10 +1781,9 @@ document.querySelectorAll('.tl-item').forEach(el => tlObserver.observe(el));
     activeBtn = null;
   }
 
-  document.querySelectorAll('.btn-primary, .nav-cta').forEach(btn => {
+  document.querySelectorAll('.btn-primary:not(.btn-hero), .nav-cta').forEach(btn => {
     btn.addEventListener('mouseenter', () => showRipple(btn));
     btn.addEventListener('mouseleave', e => {
-      // mouse moved to ghost — don't close
       if (e.relatedTarget === rippleGhost) return;
       hideRipple();
     });
