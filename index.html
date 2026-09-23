@@ -1231,60 +1231,78 @@ footer {
   <!-- Decorative gold lines -->
   <svg class="hero-deco-svg" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
     <defs>
-      <!-- Line A: bottom-left → face (bright hotspot) → upper-right -->
-      <linearGradient id="hd-g1" x1="0" y1="900" x2="1100" y2="150" gradientUnits="userSpaceOnUse">
+      <!-- Line A: bottom-left → bright below face → upper-right (hotspot at ~48%, below eye level) -->
+      <linearGradient id="hd-g1" x1="0" y1="900" x2="1080" y2="140" gradientUnits="userSpaceOnUse">
         <stop offset="0%"   stop-color="#C8A96E" stop-opacity="0"/>
-        <stop offset="42%"  stop-color="#C8A96E" stop-opacity="0.06"/>
-        <stop offset="60%"  stop-color="#EDD280" stop-opacity="1"/>
-        <stop offset="72%"  stop-color="#C8A96E" stop-opacity="0.18"/>
-        <stop offset="100%" stop-color="#C8A96E" stop-opacity="0"/>
+        <stop offset="30%"  stop-color="#C8A96E" stop-opacity="0.04"/>
+        <stop offset="48%"  stop-color="#EDD280" stop-opacity="0.95"/>
+        <stop offset="60%"  stop-color="#C8A96E" stop-opacity="0.14"/>
+        <stop offset="80%"  stop-color="#C8A96E" stop-opacity="0"/>
       </linearGradient>
       <!-- Line B: parallel, dimmer -->
-      <linearGradient id="hd-g2" x1="0" y1="900" x2="1200" y2="260" gradientUnits="userSpaceOnUse">
+      <linearGradient id="hd-g2" x1="0" y1="900" x2="1180" y2="270" gradientUnits="userSpaceOnUse">
         <stop offset="0%"   stop-color="#C8A96E" stop-opacity="0"/>
-        <stop offset="58%"  stop-color="#C8A96E" stop-opacity="0.22"/>
+        <stop offset="52%"  stop-color="#C8A96E" stop-opacity="0.20"/>
         <stop offset="100%" stop-color="#C8A96E" stop-opacity="0"/>
       </linearGradient>
-      <!-- Line C: bottom-right → face → upper-left -->
-      <linearGradient id="hd-g3" x1="1440" y1="900" x2="400" y2="100" gradientUnits="userSpaceOnUse">
+      <!-- Line C: bottom-right → bright below face → upper-left (hotspot at ~45%) -->
+      <linearGradient id="hd-g3" x1="1440" y1="900" x2="460" y2="110" gradientUnits="userSpaceOnUse">
         <stop offset="0%"   stop-color="#C8A96E" stop-opacity="0"/>
-        <stop offset="40%"  stop-color="#C8A96E" stop-opacity="0.05"/>
-        <stop offset="58%"  stop-color="#DDB96E" stop-opacity="0.85"/>
-        <stop offset="70%"  stop-color="#C8A96E" stop-opacity="0.12"/>
+        <stop offset="28%"  stop-color="#C8A96E" stop-opacity="0.04"/>
+        <stop offset="45%"  stop-color="#DDB96E" stop-opacity="0.90"/>
+        <stop offset="57%"  stop-color="#C8A96E" stop-opacity="0.12"/>
+        <stop offset="78%"  stop-color="#C8A96E" stop-opacity="0"/>
+      </linearGradient>
+      <!-- Line D: parallel to C, dimmer -->
+      <linearGradient id="hd-g4" x1="1440" y1="900" x2="360" y2="250" gradientUnits="userSpaceOnUse">
+        <stop offset="0%"   stop-color="#C8A96E" stop-opacity="0"/>
+        <stop offset="50%"  stop-color="#C8A96E" stop-opacity="0.18"/>
         <stop offset="100%" stop-color="#C8A96E" stop-opacity="0"/>
       </linearGradient>
       <filter id="hd-glow">
-        <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="blur"/>
+        <feGaussianBlur in="SourceGraphic" stdDeviation="2.5" result="blur"/>
         <feMerge><feMergeNode in="blur"/><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
       </filter>
     </defs>
 
     <!-- Line A: wide glow halo -->
-    <line x1="0" y1="900" x2="1100" y2="150" stroke="url(#hd-g1)" stroke-width="18" opacity="0.22"/>
+    <line x1="0" y1="900" x2="1080" y2="140" stroke="url(#hd-g1)" stroke-width="16" opacity="0.20"/>
     <!-- Line A: main sharp line -->
-    <line x1="0" y1="900" x2="1100" y2="150" stroke="url(#hd-g1)" stroke-width="1.5" filter="url(#hd-glow)"/>
+    <line x1="0" y1="900" x2="1080" y2="140" stroke="url(#hd-g1)" stroke-width="1.4" filter="url(#hd-glow)"/>
 
     <!-- Line B: parallel dimmer -->
-    <line x1="0" y1="900" x2="1200" y2="260" stroke="url(#hd-g2)" stroke-width="1"/>
+    <line x1="0" y1="900" x2="1180" y2="270" stroke="url(#hd-g2)" stroke-width="1"/>
 
     <!-- Line C: from right, wide glow -->
-    <line x1="1440" y1="900" x2="400" y2="100" stroke="url(#hd-g3)" stroke-width="14" opacity="0.18"/>
+    <line x1="1440" y1="900" x2="460" y2="110" stroke="url(#hd-g3)" stroke-width="14" opacity="0.18"/>
     <!-- Line C: main sharp -->
-    <line x1="1440" y1="900" x2="400" y2="100" stroke="url(#hd-g3)" stroke-width="1.4" filter="url(#hd-glow)"/>
+    <line x1="1440" y1="900" x2="460" y2="110" stroke="url(#hd-g3)" stroke-width="1.3" filter="url(#hd-glow)"/>
 
-    <!-- Corner bracket (camera focus) around face — face at approx 840–1100px x, 120–580px y -->
-    <g stroke="#C8A96E" stroke-width="2" fill="none" opacity="0.7">
-      <!-- Top-left -->
-      <polyline points="820,110 820,148 858,148"/>
-      <!-- Top-right -->
-      <polyline points="1110,110 1110,148 1072,148"/>
-      <!-- Bottom-left -->
-      <polyline points="820,590 820,552 858,552"/>
-      <!-- Bottom-right -->
-      <polyline points="1110,590 1110,552 1072,552"/>
+    <!-- Line D: parallel to C, dimmer -->
+    <line x1="1440" y1="900" x2="360" y2="250" stroke="url(#hd-g4)" stroke-width="1"/>
+
+    <!-- Horizontal eye-level accent line -->
+    <line x1="60" y1="347" x2="910" y2="347" stroke="#C8A96E" stroke-width="0.8" opacity="0.22"/>
+
+    <!-- Gold spark / 4-pointed star at left edge, eye level -->
+    <g opacity="0.85" filter="url(#hd-glow)">
+      <line x1="22" y1="347" x2="48" y2="347" stroke="#EDD280" stroke-width="1.6"/>
+      <line x1="35" y1="334" x2="35" y2="360" stroke="#EDD280" stroke-width="1.6"/>
+      <line x1="25" y1="337" x2="45" y2="357" stroke="#EDD280" stroke-width="0.9" opacity="0.7"/>
+      <line x1="45" y1="337" x2="25" y2="357" stroke="#EDD280" stroke-width="0.9" opacity="0.7"/>
     </g>
-    <!-- Eye-level horizontal accent -->
-    <line x1="825" y1="355" x2="1108" y2="330" stroke="#C8A96E" stroke-width="1" opacity="0.3"/>
+
+    <!-- Small eye reticle (camera focus bracket) around right eye — approx x:920-962, y:328-368 -->
+    <g stroke="#C8A96E" stroke-width="1.5" fill="none" opacity="0.75">
+      <!-- Top-left corner -->
+      <polyline points="920,328 920,340 932,340"/>
+      <!-- Top-right corner -->
+      <polyline points="962,328 962,340 950,340"/>
+      <!-- Bottom-left corner -->
+      <polyline points="920,368 920,356 932,356"/>
+      <!-- Bottom-right corner -->
+      <polyline points="962,368 962,356 950,356"/>
+    </g>
   </svg>
 
   <div class="hero-body">
