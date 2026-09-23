@@ -1585,23 +1585,28 @@ document.querySelectorAll('.marquee-track').forEach(track => {
       const dy = Math.abs(e.changedTouches[0].clientY - tapY);
       if (dx > 12 || dy > 12) return;
       const item = e.target.closest('.marquee-item');
-      if (!item || item.getAttribute('aria-hidden') === 'true') {
-        // Tapped outside an item — close open description
+      if (!item) {
         if (detail.classList.contains('open')) closeDetail();
         return;
       }
-      if (item.classList.contains('active')) {
-        // Tapped same active item — close
+      // Use original data-detail regardless of aria-hidden (clone or original)
+      const activeKey = track.querySelector('.marquee-item.active')?.dataset.detail;
+      if (activeKey && activeKey === item.dataset.detail) {
         closeDetail();
       } else {
         showDetail(item);
       }
     });
   } else {
-    track.querySelectorAll('.marquee-item').forEach(item => {
-      item.addEventListener('mouseenter', () => showDetail(item));
-      item.addEventListener('mouseleave', () => closeDetail());
-    });
+    // Event delegation — works for originals and clones alike
+    track.addEventListener('mouseenter', e => {
+      const item = e.target.closest('.marquee-item');
+      if (item) showDetail(item);
+    }, true);
+    track.addEventListener('mouseleave', e => {
+      const item = e.target.closest('.marquee-item');
+      if (item) closeDetail();
+    }, true);
   }
 });
 
