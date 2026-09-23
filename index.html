@@ -352,6 +352,15 @@ nav.scrolled {
   transform: translateY(-2px);
 }
 
+/* ── HERO DECO LINES ────────────────────────────────────── */
+.hero-deco-svg {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  z-index: 1; pointer-events: none;
+  overflow: visible;
+}
+@media (max-width: 767px) { .hero-deco-svg { display: none; } }
+
 /* ── RIPPLE OVERLAY ─────────────────────────────────────── */
 #btn-ripple-overlay {
   position: fixed; inset: 0; z-index: 200;
@@ -377,13 +386,13 @@ nav.scrolled {
   animation: wave-soft-fill 0.95s cubic-bezier(0.25,0.46,0.45,0.94) 0.28s forwards;
 }
 @keyframes wave-soft-pulse {
-  0%   { transform: scale(0);   opacity: 0.35; background: #fff; }
-  100% { transform: scale(220); opacity: 0;    background: #fff; }
+  0%   { transform: scale(0);   opacity: 0.5; background: #C8A96E; }
+  100% { transform: scale(220); opacity: 0;   background: #E8C878; }
 }
 @keyframes wave-soft-fill {
-  0%   { transform: scale(0);   opacity: 0;  background: #fff; }
-  25%  { opacity: 0.85; }
-  100% { transform: scale(320); opacity: 1;  background: #fff; }
+  0%   { transform: scale(0);   opacity: 0;  background: #C8A96E; }
+  20%  { background: #D4B87A; }
+  100% { transform: scale(320); opacity: 1;  background: #F0E0A0; }
 }
 #btn-ripple-text {
   position: fixed; z-index: 201;
@@ -1218,6 +1227,57 @@ footer {
     <img class="hero-bg-main" src="photo.png" alt="Эмиль — бизнес-ассистент">
     <div class="hero-bg-overlay"></div>
   </div>
+
+  <!-- Decorative gold lines -->
+  <svg class="hero-deco-svg" viewBox="0 0 100 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="hd-g1" x1="0" y1="100" x2="46" y2="34" gradientUnits="userSpaceOnUse">
+        <stop offset="0%"   stop-color="#C8A96E" stop-opacity="0"/>
+        <stop offset="35%"  stop-color="#C8A96E" stop-opacity="0.12"/>
+        <stop offset="58%"  stop-color="#E8C878" stop-opacity="1"/>
+        <stop offset="78%"  stop-color="#C8A96E" stop-opacity="0.25"/>
+        <stop offset="100%" stop-color="#C8A96E" stop-opacity="0"/>
+      </linearGradient>
+      <linearGradient id="hd-g2" x1="0" y1="100" x2="40" y2="43" gradientUnits="userSpaceOnUse">
+        <stop offset="0%"   stop-color="#C8A96E" stop-opacity="0"/>
+        <stop offset="55%"  stop-color="#C8A96E" stop-opacity="0.28"/>
+        <stop offset="100%" stop-color="#C8A96E" stop-opacity="0"/>
+      </linearGradient>
+      <linearGradient id="hd-g3" x1="100" y1="92" x2="57" y2="36" gradientUnits="userSpaceOnUse">
+        <stop offset="0%"   stop-color="#C8A96E" stop-opacity="0"/>
+        <stop offset="38%"  stop-color="#C8A96E" stop-opacity="0.08"/>
+        <stop offset="60%"  stop-color="#DDB96E" stop-opacity="0.85"/>
+        <stop offset="82%"  stop-color="#C8A96E" stop-opacity="0.15"/>
+        <stop offset="100%" stop-color="#C8A96E" stop-opacity="0"/>
+      </linearGradient>
+      <filter id="hd-glow" x="-200%" y="-200%" width="500%" height="500%">
+        <feGaussianBlur in="SourceGraphic" stdDeviation="0.6" result="blur"/>
+        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+    </defs>
+
+    <!-- Left diagonal — glow halo -->
+    <line x1="0" y1="100" x2="46" y2="34" stroke="url(#hd-g1)" stroke-width="1.8" opacity="0.28"/>
+    <!-- Left diagonal — main sharp line -->
+    <line x1="0" y1="100" x2="46" y2="34" stroke="url(#hd-g1)" stroke-width="0.18" filter="url(#hd-glow)"/>
+    <!-- Left diagonal — second dimmer parallel -->
+    <line x1="0" y1="100" x2="40" y2="43" stroke="url(#hd-g2)" stroke-width="0.12"/>
+
+    <!-- Right diagonal — glow halo -->
+    <line x1="100" y1="92" x2="57" y2="36" stroke="url(#hd-g3)" stroke-width="1.4" opacity="0.22"/>
+    <!-- Right diagonal — main sharp line -->
+    <line x1="100" y1="92" x2="57" y2="36" stroke="url(#hd-g3)" stroke-width="0.16" filter="url(#hd-glow)"/>
+
+    <!-- Corner bracket (camera focus) around face -->
+    <g stroke="#C8A96E" stroke-width="0.22" fill="none" opacity="0.65">
+      <polyline points="60,20 60,23.5 63.5,23.5"/>
+      <polyline points="79,20 79,23.5 75.5,23.5"/>
+      <polyline points="60,66 60,62.5 63.5,62.5"/>
+      <polyline points="79,66 79,62.5 75.5,62.5"/>
+    </g>
+    <!-- Subtle horizontal accent at eye level -->
+    <line x1="57" y1="40.5" x2="79" y2="38.5" stroke="#C8A96E" stroke-width="0.12" opacity="0.35"/>
+  </svg>
 
   <div class="hero-body">
     <div class="hero-left">
