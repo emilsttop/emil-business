@@ -359,21 +359,32 @@ nav.scrolled {
   display: flex; align-items: center; justify-content: center;
   overflow: hidden;
 }
-#btn-ripple-circle {
+.btn-ripple-wave {
   position: absolute;
   width: 10px; height: 10px;
   border-radius: 50%;
-  background: #C8A96E;
   transform: scale(0);
-  transition: transform 0.75s cubic-bezier(0.22,1,0.36,1);
+  opacity: 0;
+  pointer-events: none;
 }
-#btn-ripple-overlay.active #btn-ripple-circle {
-  animation: ripple-gold-to-white 0.85s cubic-bezier(0.22,1,0.36,1) forwards;
+#btn-ripple-overlay.active .btn-ripple-wave:nth-child(1) {
+  animation: wave-pulse 1.4s cubic-bezier(0.22,1,0.36,1) 0s forwards;
 }
-@keyframes ripple-gold-to-white {
-  0%   { transform: scale(0);   background: #C8A96E; }
-  35%  { transform: scale(120); background: #C8A96E; }
-  100% { transform: scale(320); background: #ffffff; }
+#btn-ripple-overlay.active .btn-ripple-wave:nth-child(2) {
+  animation: wave-pulse 1.4s cubic-bezier(0.22,1,0.36,1) 0.18s forwards;
+}
+#btn-ripple-overlay.active .btn-ripple-wave:nth-child(3) {
+  animation: wave-fill 1.1s cubic-bezier(0.22,1,0.36,1) 0.36s forwards;
+}
+@keyframes wave-pulse {
+  0%   { transform: scale(0);   opacity: 0.9; background: #C8A96E; }
+  60%  { transform: scale(160); opacity: 0.5; background: #d4b87a; }
+  100% { transform: scale(260); opacity: 0;   background: #e8d4a0; }
+}
+@keyframes wave-fill {
+  0%   { transform: scale(0);   opacity: 1;   background: #C8A96E; }
+  40%  { transform: scale(80);  opacity: 1;   background: #dbc07a; }
+  100% { transform: scale(320); opacity: 1;   background: #ffffff; }
 }
 #btn-ripple-text {
   position: fixed; z-index: 201;
@@ -1180,7 +1191,9 @@ footer {
 
 <div id="spotlight"></div>
 <div id="btn-ripple-overlay">
-  <div id="btn-ripple-circle"></div>
+  <div class="btn-ripple-wave"></div>
+  <div class="btn-ripple-wave"></div>
+  <div class="btn-ripple-wave"></div>
   <p id="btn-ripple-text">Тратить меньше.<br>Получать больше.<br>Вы уверены, что хотите этого?</p>
   <a id="btn-ripple-ghost" href="#" target="_blank" rel="noopener"></a>
 </div>
@@ -1601,7 +1614,6 @@ document.querySelectorAll('.tl-item').forEach(el => tlObserver.observe(el));
 // ── BUTTON RIPPLE EFFECT ─────────────────────────────────
 (function() {
   const rippleOverlay = document.getElementById('btn-ripple-overlay');
-  const rippleCircle = document.getElementById('btn-ripple-circle');
   const rippleGhost = document.getElementById('btn-ripple-ghost');
   if (!rippleOverlay) return;
   let activeBtn = null;
@@ -1643,8 +1655,11 @@ document.querySelectorAll('.tl-item').forEach(el => tlObserver.observe(el));
 
     positionText(btn);
 
-    rippleCircle.style.left = (rect.left + rect.width / 2 - 5) + 'px';
-    rippleCircle.style.top  = (rect.top  + rect.height / 2 - 5) + 'px';
+    const cx = (rect.left + rect.width / 2 - 5) + 'px';
+    const cy = (rect.top  + rect.height / 2 - 5) + 'px';
+    rippleOverlay.querySelectorAll('.btn-ripple-wave').forEach(w => {
+      w.style.left = cx; w.style.top = cy;
+    });
     rippleGhost.style.left   = rect.left + 'px';
     rippleGhost.style.top    = rect.top + 'px';
     rippleGhost.style.width  = rect.width + 'px';
