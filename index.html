@@ -368,23 +368,22 @@ nav.scrolled {
   pointer-events: none;
 }
 #btn-ripple-overlay.active .btn-ripple-wave:nth-child(1) {
-  animation: wave-pulse 1.4s cubic-bezier(0.22,1,0.36,1) 0s forwards;
+  animation: wave-soft-pulse 1.1s ease-out 0s forwards;
 }
 #btn-ripple-overlay.active .btn-ripple-wave:nth-child(2) {
-  animation: wave-pulse 1.4s cubic-bezier(0.22,1,0.36,1) 0.18s forwards;
+  animation: wave-soft-pulse 1.1s ease-out 0.16s forwards;
 }
 #btn-ripple-overlay.active .btn-ripple-wave:nth-child(3) {
-  animation: wave-fill 1.1s cubic-bezier(0.22,1,0.36,1) 0.36s forwards;
+  animation: wave-soft-fill 0.95s cubic-bezier(0.25,0.46,0.45,0.94) 0.28s forwards;
 }
-@keyframes wave-pulse {
-  0%   { transform: scale(0);   opacity: 0.9; background: #C8A96E; }
-  60%  { transform: scale(160); opacity: 0.5; background: #d4b87a; }
-  100% { transform: scale(260); opacity: 0;   background: #e8d4a0; }
+@keyframes wave-soft-pulse {
+  0%   { transform: scale(0);   opacity: 0.35; background: #fff; }
+  100% { transform: scale(220); opacity: 0;    background: #fff; }
 }
-@keyframes wave-fill {
-  0%   { transform: scale(0);   opacity: 1;   background: #C8A96E; }
-  40%  { transform: scale(80);  opacity: 1;   background: #dbc07a; }
-  100% { transform: scale(320); opacity: 1;   background: #ffffff; }
+@keyframes wave-soft-fill {
+  0%   { transform: scale(0);   opacity: 0;  background: #fff; }
+  25%  { opacity: 0.85; }
+  100% { transform: scale(320); opacity: 1;  background: #fff; }
 }
 #btn-ripple-text {
   position: fixed; z-index: 201;
@@ -1671,11 +1670,13 @@ document.querySelectorAll('.tl-item').forEach(el => tlObserver.observe(el));
     rippleGhost.style.height = rect.height + 'px';
     rippleGhost.innerHTML = btn.innerHTML;
     rippleGhost.href = btn.href || '#';
+    btn.style.opacity = '0';
     rippleOverlay.classList.add('active');
     document.body.style.overflow = 'hidden';
   }
 
   function hideRipple() {
+    if (activeBtn) activeBtn.style.opacity = '';
     rippleOverlay.classList.remove('active');
     document.body.style.overflow = '';
     activeBtn = null;
