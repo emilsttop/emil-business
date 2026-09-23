@@ -35,7 +35,6 @@ body {
   font-weight: 300;
   line-height: 1.6;
   overflow-x: hidden;
-  scrollbar-gutter: stable;
 }
 
 /* ── LOADER ─────────────────────────────────────────────── */
@@ -1681,6 +1680,8 @@ document.querySelectorAll('.tl-item').forEach(el => tlObserver.observe(el));
     });
     btn.style.opacity = '0';
     rippleOverlay.classList.add('active');
+    const sb = window.innerWidth - document.documentElement.clientWidth;
+    document.body.style.paddingRight = sb + 'px';
     document.body.style.overflowY = 'hidden';
   }
 
@@ -1691,6 +1692,7 @@ document.querySelectorAll('.tl-item').forEach(el => tlObserver.observe(el));
     });
     rippleOverlay.classList.remove('active');
     document.body.style.overflowY = '';
+    document.body.style.paddingRight = '';
     activeBtn = null;
   }
 
