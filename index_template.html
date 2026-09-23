@@ -1673,13 +1673,19 @@ document.querySelectorAll('.tl-item').forEach(el => tlObserver.observe(el));
     rippleGhost.style.height = rect.height + 'px';
     rippleGhost.innerHTML = btn.innerHTML;
     rippleGhost.href = btn.href || '#';
-    document.querySelectorAll('.btn-primary, .nav-cta').forEach(b => { b.style.opacity = '0'; });
+    document.querySelectorAll('.btn-primary, .nav-cta').forEach(b => {
+      if (b !== btn) b.style.zIndex = '1';
+    });
+    btn.style.opacity = '0';
     rippleOverlay.classList.add('active');
     document.body.style.overflow = 'hidden';
   }
 
   function hideRipple() {
-    document.querySelectorAll('.btn-primary, .nav-cta').forEach(b => { b.style.opacity = ''; });
+    document.querySelectorAll('.btn-primary, .nav-cta').forEach(b => {
+      b.style.zIndex = '';
+      b.style.opacity = '';
+    });
     rippleOverlay.classList.remove('active');
     document.body.style.overflow = '';
     activeBtn = null;
