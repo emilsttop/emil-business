@@ -352,14 +352,6 @@ nav.scrolled {
   transform: translateY(-2px);
 }
 
-/* ── HERO DECO LINES ────────────────────────────────────── */
-.hero-deco-svg {
-  position: absolute; inset: 0;
-  width: 100%; height: 100%;
-  z-index: 1; pointer-events: none;
-  overflow: visible;
-}
-@media (max-width: 767px) { .hero-deco-svg { display: none; } }
 
 /* ── RIPPLE OVERLAY ─────────────────────────────────────── */
 #btn-ripple-overlay {
@@ -1228,64 +1220,6 @@ footer {
     <div class="hero-bg-overlay"></div>
   </div>
 
-  <!-- Decorative gold lines -->
-  <svg class="hero-deco-svg" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-    <defs>
-      <!-- Line A: bottom-left → face (bright hotspot) → upper-right -->
-      <linearGradient id="hd-g1" x1="0" y1="900" x2="1100" y2="150" gradientUnits="userSpaceOnUse">
-        <stop offset="0%"   stop-color="#C8A96E" stop-opacity="0"/>
-        <stop offset="42%"  stop-color="#C8A96E" stop-opacity="0.06"/>
-        <stop offset="60%"  stop-color="#EDD280" stop-opacity="1"/>
-        <stop offset="72%"  stop-color="#C8A96E" stop-opacity="0.18"/>
-        <stop offset="100%" stop-color="#C8A96E" stop-opacity="0"/>
-      </linearGradient>
-      <!-- Line B: parallel, dimmer -->
-      <linearGradient id="hd-g2" x1="0" y1="900" x2="1200" y2="260" gradientUnits="userSpaceOnUse">
-        <stop offset="0%"   stop-color="#C8A96E" stop-opacity="0"/>
-        <stop offset="58%"  stop-color="#C8A96E" stop-opacity="0.22"/>
-        <stop offset="100%" stop-color="#C8A96E" stop-opacity="0"/>
-      </linearGradient>
-      <!-- Line C: bottom-right → face → upper-left -->
-      <linearGradient id="hd-g3" x1="1440" y1="900" x2="400" y2="100" gradientUnits="userSpaceOnUse">
-        <stop offset="0%"   stop-color="#C8A96E" stop-opacity="0"/>
-        <stop offset="40%"  stop-color="#C8A96E" stop-opacity="0.05"/>
-        <stop offset="58%"  stop-color="#DDB96E" stop-opacity="0.85"/>
-        <stop offset="70%"  stop-color="#C8A96E" stop-opacity="0.12"/>
-        <stop offset="100%" stop-color="#C8A96E" stop-opacity="0"/>
-      </linearGradient>
-      <filter id="hd-glow">
-        <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="blur"/>
-        <feMerge><feMergeNode in="blur"/><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-      </filter>
-    </defs>
-
-    <!-- Line A: wide glow halo -->
-    <line x1="0" y1="900" x2="1100" y2="150" stroke="url(#hd-g1)" stroke-width="18" opacity="0.22"/>
-    <!-- Line A: main sharp line -->
-    <line x1="0" y1="900" x2="1100" y2="150" stroke="url(#hd-g1)" stroke-width="1.5" filter="url(#hd-glow)"/>
-
-    <!-- Line B: parallel dimmer -->
-    <line x1="0" y1="900" x2="1200" y2="260" stroke="url(#hd-g2)" stroke-width="1"/>
-
-    <!-- Line C: from right, wide glow -->
-    <line x1="1440" y1="900" x2="400" y2="100" stroke="url(#hd-g3)" stroke-width="14" opacity="0.18"/>
-    <!-- Line C: main sharp -->
-    <line x1="1440" y1="900" x2="400" y2="100" stroke="url(#hd-g3)" stroke-width="1.4" filter="url(#hd-glow)"/>
-
-    <!-- Corner bracket (camera focus) around face — face at approx 840–1100px x, 120–580px y -->
-    <g stroke="#C8A96E" stroke-width="2" fill="none" opacity="0.7">
-      <!-- Top-left -->
-      <polyline points="820,110 820,148 858,148"/>
-      <!-- Top-right -->
-      <polyline points="1110,110 1110,148 1072,148"/>
-      <!-- Bottom-left -->
-      <polyline points="820,590 820,552 858,552"/>
-      <!-- Bottom-right -->
-      <polyline points="1110,590 1110,552 1072,552"/>
-    </g>
-    <!-- Eye-level horizontal accent -->
-    <line x1="825" y1="355" x2="1108" y2="330" stroke="#C8A96E" stroke-width="1" opacity="0.3"/>
-  </svg>
 
   <div class="hero-body">
     <div class="hero-left">
@@ -1694,28 +1628,29 @@ document.querySelectorAll('.tl-item').forEach(el => tlObserver.observe(el));
 
   function positionText(btn) {
     const vh = window.innerHeight;
-    const textH = 180; // approx text block height
-    const midTop = Math.round(vh / 2 - textH / 2);
+    const rect = btn.getBoundingClientRect();
+    const textH = 220;
+    const gap = 52;
 
-    // Reset
     rippleText.style.left = '';
     rippleText.style.right = '';
-    rippleText.style.top = midTop + 'px';
+    rippleText.style.marginLeft = '';
 
     if (btn.classList.contains('nav-cta')) {
-      // Nav button → text centered horizontally and vertically
+      // Nav button is top-right; put text in lower half to stay clear of ghost
+      rippleText.style.top = Math.round(vh * 0.55) + 'px';
       rippleText.style.left = '50%';
       rippleText.style.marginLeft = '-300px';
       rippleText.style.textAlign = 'center';
     } else if (btn.classList.contains('btn-hero')) {
       // Hero button → right side, vertically centered
+      rippleText.style.top = Math.round(vh / 2 - textH / 2) + 'px';
       rippleText.style.right = '6vw';
-      rippleText.style.marginLeft = '0';
       rippleText.style.textAlign = 'right';
     } else {
-      // Final CTA button → left side, vertically centered
+      // Final CTA button is at bottom of page — always put text in upper area
+      rippleText.style.top = Math.round(vh * 0.18) + 'px';
       rippleText.style.left = '6vw';
-      rippleText.style.marginLeft = '0';
       rippleText.style.textAlign = 'left';
     }
   }
@@ -1738,13 +1673,13 @@ document.querySelectorAll('.tl-item').forEach(el => tlObserver.observe(el));
     rippleGhost.style.height = rect.height + 'px';
     rippleGhost.innerHTML = btn.innerHTML;
     rippleGhost.href = btn.href || '#';
-    btn.style.opacity = '0';
+    document.querySelectorAll('.btn-primary, .nav-cta').forEach(b => { b.style.opacity = '0'; });
     rippleOverlay.classList.add('active');
     document.body.style.overflow = 'hidden';
   }
 
   function hideRipple() {
-    if (activeBtn) activeBtn.style.opacity = '';
+    document.querySelectorAll('.btn-primary, .nav-cta').forEach(b => { b.style.opacity = ''; });
     rippleOverlay.classList.remove('active');
     document.body.style.overflow = '';
     activeBtn = null;
@@ -1753,7 +1688,6 @@ document.querySelectorAll('.tl-item').forEach(el => tlObserver.observe(el));
   document.querySelectorAll('.btn-primary, .nav-cta').forEach(btn => {
     btn.addEventListener('mouseenter', () => showRipple(btn));
     btn.addEventListener('mouseleave', e => {
-      // mouse moved to ghost — don't close
       if (e.relatedTarget === rippleGhost) return;
       hideRipple();
     });
