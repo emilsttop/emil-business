@@ -1009,9 +1009,8 @@ nav.scrolled {
 /* ── FOOTER ─────────────────────────────────────────────── */
 footer {
   border-top: 1px solid var(--border-faint);
-  padding: 36px 48px;
   display: flex; justify-content: space-between; align-items: center;
-  flex-wrap: wrap; gap: 16px; padding: 36px 8vw;
+  flex-wrap: nowrap; gap: 16px; padding: 14px 8vw;
 }
 .footer-copy { font-size: 12px; color: var(--text-muted); }
 .footer-links { display: flex; gap: 28px; flex-wrap: wrap; }
@@ -1479,10 +1478,10 @@ footer {
     <h2 class="cta-title">Напишите мне и за<br><em>20 минут</em> мы поймём,<br>чем можем быть<br>полезны друг другу</h2>
   </div>
   <div class="cta-right reveal" style="transition-delay:.15s">
-    <a class="btn-primary" href="https://t.me/EBorisovv" target="_blank" rel="noopener" style="font-size:14px;padding:18px 40px">
+    <a class="btn-primary" href="https://t.me/EBorisovv" target="_blank" rel="noopener" style="font-size:14px;padding:18px 40px;width:100%;justify-content:center">
       Написать мне* <span class="arrow">→</span>
     </a>
-    <p class="cta-hint">*Возможно одно из лучших решений в Вашей жизни</p>
+    <p class="cta-hint" style="width:100%">*Возможно одно из лучших решений в Вашей жизни</p>
   </div>
 </section>
 
@@ -1678,7 +1677,7 @@ document.querySelectorAll('.tl-item').forEach(el => tlObserver.observe(el));
     });
     btn.style.opacity = '0';
     rippleOverlay.classList.add('active');
-    document.body.style.overflow = 'hidden';
+    document.body.style.overflowY = 'hidden';
   }
 
   function hideRipple() {
@@ -1687,7 +1686,7 @@ document.querySelectorAll('.tl-item').forEach(el => tlObserver.observe(el));
       b.style.opacity = '';
     });
     rippleOverlay.classList.remove('active');
-    document.body.style.overflow = '';
+    document.body.style.overflowY = '';
     activeBtn = null;
   }
 
