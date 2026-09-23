@@ -1642,6 +1642,11 @@ document.querySelectorAll('.tl-item').forEach(el => tlObserver.observe(el));
       rippleText.style.left = '50%';
       rippleText.style.marginLeft = '-300px';
       rippleText.style.textAlign = 'center';
+    } else if (btn.classList.contains('btn-hero')) {
+      // Hero button → right side, vertically centered
+      rippleText.style.top = Math.round(vh / 2 - textH / 2) + 'px';
+      rippleText.style.right = '6vw';
+      rippleText.style.textAlign = 'right';
     } else {
       // Final CTA button → above if room, otherwise below
       const aboveTop = rect.top - textH - gap;
@@ -1683,7 +1688,7 @@ document.querySelectorAll('.tl-item').forEach(el => tlObserver.observe(el));
     activeBtn = null;
   }
 
-  document.querySelectorAll('.btn-primary:not(.btn-hero), .nav-cta').forEach(btn => {
+  document.querySelectorAll('.btn-primary, .nav-cta').forEach(btn => {
     btn.addEventListener('mouseenter', () => showRipple(btn));
     btn.addEventListener('mouseleave', e => {
       if (e.relatedTarget === rippleGhost) return;
