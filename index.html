@@ -1105,7 +1105,7 @@ footer {
     width: 100%; padding: 0 20px;
   }
   .hero-left {
-    padding: 20px 0 40px;
+    padding: 4px 0 40px;
     width: 100%;
     min-height: 100vh;
     justify-content: flex-start;
@@ -1133,10 +1133,32 @@ footer {
   .stat-cell { border-right: none; border-bottom: 1px solid var(--border-faint); padding: 20px 0; }
   .stat-cell:nth-child(odd) { border-right: 1px solid var(--border-faint); padding-right: 12px; }
   .stat-val { font-size: 32px; }
-  .cases-top-row, .cases-mid-row, .cases-bot-row { grid-template-columns: 1fr; }
+  /* Floating cards: variant 1 */
+  .case-card { border-radius: 14px; box-shadow: 0 6px 28px rgba(0,0,0,0.52); }
+  /* Horizontal scroll rows: variant 3 */
+  .cases-top-row,
+  .cases-mid-row.cases-expanded,
+  .cases-bot-row.cases-expanded {
+    display: flex; flex-wrap: nowrap;
+    overflow-x: auto; overflow-y: visible;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    gap: 12px;
+    margin: 0 -4vw 12px; padding: 0 4vw 12px;
+    background: transparent;
+  }
+  .cases-top-row::-webkit-scrollbar,
+  .cases-mid-row::-webkit-scrollbar,
+  .cases-bot-row::-webkit-scrollbar { height: 2px; }
+  .cases-top-row::-webkit-scrollbar-thumb,
+  .cases-mid-row::-webkit-scrollbar-thumb,
+  .cases-bot-row::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 1px; }
+  .cases-top-row .case-card,
+  .cases-mid-row .case-card,
+  .cases-bot-row .case-card { flex: 0 0 80vw; scroll-snap-align: start; }
+  .cases-top-row .case-card.big { flex: 0 0 88vw; min-height: 290px; }
   /* Скрываем mid/bot на мобиле до нажатия */
   .cases-mid-row, .cases-bot-row { display: none; }
-  .cases-mid-row.cases-expanded, .cases-bot-row.cases-expanded { display: grid; }
   /* Кнопка «Показать ещё» */
   .cases-more-btn {
     display: flex; /* overrides the global display:none below */
@@ -1201,7 +1223,7 @@ footer {
 @media (max-width: 480px) {
   .stats-row { grid-template-columns: 1fr; }
   .stat-cell { border-right: none !important; }
-  .cases-mid-row, .cases-bot-row { grid-template-columns: 1fr; }
+  /* mid/bot rows stay flex (horizontal scroll) on small screens */
 }
 
 @media (prefers-reduced-motion: reduce) {
