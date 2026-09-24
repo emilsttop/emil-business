@@ -1094,7 +1094,7 @@ footer {
     width: 100%; padding: 0 20px;
   }
   .hero-left {
-    padding: 90px 0 40px;
+    padding: 64px 0 40px;
     width: 100%;
     min-height: 100vh;
     justify-content: flex-start;
@@ -1111,7 +1111,7 @@ footer {
     justify-content: flex-start;
     padding-top: 32px;
   }
-  .hero-sub { font-size: 13px; }
+  .hero-sub { font-size: 13px; text-align: left !important; }
   .hero-sub-sm { max-width: 100%; font-size: 12px; }
   .hero-bottom-cta { width: 100%; }
   .btn-primary { width: 100%; justify-content: center; }
@@ -1150,13 +1150,8 @@ footer {
   .cases-more-btn.hidden { display: none; }
   #cases { padding: 0 4vw 56px; }
   .case-card { min-height: 220px; transition: background 0.25s; will-change: auto; transform: none !important; }
-  /* Карусель: нативный скролл на мобиле */
+  /* Карусель: не ставить на паузу при тапе (hover: none) */
   .marquee-wrap:hover .marquee-track { animation-play-state: running; }
-  .marquee-wrap { overflow-x: auto; overflow-y: visible; -webkit-overflow-scrolling: touch; padding-bottom: 6px; }
-  .marquee-wrap::-webkit-scrollbar { height: 2px; }
-  .marquee-wrap::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 1px; }
-  .marquee-track { animation: none !important; transform: none !important; flex-wrap: nowrap; }
-  .marquee-track [aria-hidden="true"] { display: none; }
   /* На мобиле фото карточки показывать всегда (нет hover) */
   .case-card::after { opacity: 0.85; }
   .case-card .case-niche,
@@ -1588,6 +1583,7 @@ document.querySelectorAll('.marquee-track').forEach(track => {
     track.addEventListener('touchstart', e => {
       tapX = e.touches[0].clientX;
       tapY = e.touches[0].clientY;
+      track.style.animationPlayState = 'paused';
     }, { passive: true });
     track.addEventListener('touchend', e => {
       const dx = Math.abs(e.changedTouches[0].clientX - tapX);
@@ -1596,6 +1592,7 @@ document.querySelectorAll('.marquee-track').forEach(track => {
       const item = e.target.closest('.marquee-item');
       if (!item) {
         if (detail.classList.contains('open')) closeDetail();
+        else resumeTrack();
         return;
       }
       // Use original data-detail regardless of aria-hidden (clone or original)
@@ -1825,7 +1822,7 @@ if (!isTouch) {
 }
 
 // ── MARQUEE SWIPE (мобиль) ────────────────────────────────
-if (isTouch && !window.matchMedia('(max-width: 767px)').matches) {
+if (isTouch) {
   document.querySelectorAll('.marquee-wrap').forEach(wrap => {
     const track = wrap.querySelector('.marquee-track');
     if (!track) return;
