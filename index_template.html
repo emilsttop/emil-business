@@ -1065,6 +1065,7 @@ footer {
   .nav-logo { font-size: 13px; line-height: 1.3; }
   .nav-logo span { display: block; white-space: nowrap; font-size: 8px; }
   .nav-cta { padding: 7px 14px; font-size: 11px; gap: 5px; white-space: nowrap; }
+  .nav-center { display: none; }
 
   /* Loader */
   .loader-name { font-size: clamp(18px, 5vw, 32px); letter-spacing: 0.07em; text-align: center; }
@@ -1105,10 +1106,10 @@ footer {
   .hero-bottom {
     flex-direction: column;
     align-items: flex-start;
-    gap: 20px;
-    flex: 1;
-    justify-content: space-between;
-    padding-top: 40px;
+    gap: 24px;
+    flex: 0;
+    justify-content: flex-start;
+    padding-top: 32px;
   }
   .hero-sub { font-size: 13px; }
   .hero-sub-sm { max-width: 100%; font-size: 12px; }
@@ -1149,8 +1150,13 @@ footer {
   .cases-more-btn.hidden { display: none; }
   #cases { padding: 0 4vw 56px; }
   .case-card { min-height: 220px; transition: background 0.25s; will-change: auto; transform: none !important; }
-  /* Карусель: не ставить на паузу при тапе */
+  /* Карусель: нативный скролл на мобиле */
   .marquee-wrap:hover .marquee-track { animation-play-state: running; }
+  .marquee-wrap { overflow-x: auto; overflow-y: visible; -webkit-overflow-scrolling: touch; padding-bottom: 6px; }
+  .marquee-wrap::-webkit-scrollbar { height: 2px; }
+  .marquee-wrap::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 1px; }
+  .marquee-track { animation: none !important; transform: none !important; flex-wrap: nowrap; }
+  .marquee-track [aria-hidden="true"] { display: none; }
   /* На мобиле фото карточки показывать всегда (нет hover) */
   .case-card::after { opacity: 0.85; }
   .case-card .case-niche,
@@ -1639,8 +1645,7 @@ document.querySelectorAll('.tl-item').forEach(el => tlObserver.observe(el));
     rippleText.style.marginLeft = '';
 
     if (btn.classList.contains('nav-cta')) {
-      // Nav button is top-right; put text in lower half to stay clear of ghost
-      rippleText.style.top = Math.round(vh * 0.55) + 'px';
+      rippleText.style.top = Math.round(vh / 2 - textH / 2) + 'px';
       rippleText.style.left = '50%';
       rippleText.style.marginLeft = '-300px';
       rippleText.style.textAlign = 'center';
@@ -1820,7 +1825,7 @@ if (!isTouch) {
 }
 
 // ── MARQUEE SWIPE (мобиль) ────────────────────────────────
-if (isTouch) {
+if (isTouch && !window.matchMedia('(max-width: 767px)').matches) {
   document.querySelectorAll('.marquee-wrap').forEach(wrap => {
     const track = wrap.querySelector('.marquee-track');
     if (!track) return;
