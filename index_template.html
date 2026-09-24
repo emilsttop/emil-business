@@ -112,12 +112,12 @@ nav.scrolled {
   transition: color 0.25s;
 }
 .nav-logo span {
-  color: var(--gold);
+  display: none;
+  color: var(--text-muted);
   font-family: 'Jost', sans-serif;
   font-size: 10px;
-  font-weight: 500;
-  letter-spacing: 0.2em;
-  vertical-align: middle;
+  font-weight: 400;
+  letter-spacing: 0.08em;
   transition: color 0.25s;
 }
 .nav-logo:hover { color: var(--gold); }
@@ -325,6 +325,7 @@ nav.scrolled {
 }
 
 /* ── BUTTONS ────────────────────────────────────────────── */
+.tg-icon { width: 18px; height: 18px; flex-shrink: 0; fill: currentColor; }
 .btn-primary {
   display: inline-flex; align-items: center; gap: 10px;
   padding: 16px 32px;
@@ -828,6 +829,15 @@ nav.scrolled {
   from { transform: translateX(-33.333%); }
   to   { transform: translateX(-66.667%); }
 }
+@keyframes shimmer-swipe {
+  0%   { transform: skewX(-18deg) translateX(-250%); }
+  40%  { transform: skewX(-18deg) translateX(450%); }
+  100% { transform: skewX(-18deg) translateX(450%); }
+}
+@keyframes hint-pulse {
+  0%, 100% { opacity: 0.55; text-shadow: 0 0 0 rgba(200,169,110,0); }
+  50%       { opacity: 1;    text-shadow: 0 0 10px rgba(200,169,110,0.9), 0 0 22px rgba(200,169,110,0.4); }
+}
 .marquee-item {
   display: inline-block;
   padding: 14px 32px;
@@ -1063,8 +1073,9 @@ footer {
 @media (max-width: 767px) {
   nav { padding: 16px 20px; }
   .nav-logo { font-size: 13px; line-height: 1.3; }
-  .nav-logo span { display: block; white-space: nowrap; font-size: 8px; }
+  .nav-logo span { display: block; white-space: nowrap; font-size: 8px; letter-spacing: 0.06em; }
   .nav-cta { padding: 7px 14px; font-size: 11px; gap: 5px; white-space: nowrap; }
+  .nav-cta .tg-icon { width: 14px; height: 14px; }
   .nav-center { display: none; }
 
   /* Loader */
@@ -1094,11 +1105,20 @@ footer {
     width: 100%; padding: 0 20px;
   }
   .hero-left {
-    padding: 90px 0 40px;
+    padding: 62px 0 40px;
     width: 100%;
     min-height: 100vh;
     justify-content: flex-start;
   }
+  .hero-middle {
+    flex: 0 0 auto;
+    align-items: flex-start;
+  }
+  .hero-middle > div {
+    display: flex; flex-direction: column;
+    min-height: 52vh;
+  }
+  .hero-middle > div .hero-sub { margin-top: auto !important; }
   .hero-title { font-size: clamp(34px, 9vw, 48px); }
   .hero-statement { font-size: clamp(18px, 5vw, 24px); text-align: left; }
   .hero-photo-caption { display: none; }
@@ -1111,7 +1131,7 @@ footer {
     justify-content: flex-start;
     padding-top: 32px;
   }
-  .hero-sub { font-size: 13px; }
+  .hero-sub { font-size: 13px; text-align: left !important; }
   .hero-sub-sm { max-width: 100%; font-size: 12px; }
   .hero-bottom-cta { width: 100%; }
   .btn-primary { width: 100%; justify-content: center; }
@@ -1122,10 +1142,45 @@ footer {
   .stat-cell { border-right: none; border-bottom: 1px solid var(--border-faint); padding: 20px 0; }
   .stat-cell:nth-child(odd) { border-right: 1px solid var(--border-faint); padding-right: 12px; }
   .stat-val { font-size: 32px; }
-  .cases-top-row, .cases-mid-row, .cases-bot-row { grid-template-columns: 1fr; }
+  /* Floating cards: variant 1 */
+  .case-card { border-radius: 14px; box-shadow: 0 6px 28px rgba(0,0,0,0.52); }
+  /* Horizontal scroll rows: variant 3 */
+  .cases-top-row,
+  .cases-mid-row.cases-expanded,
+  .cases-bot-row.cases-expanded {
+    display: flex; flex-wrap: nowrap;
+    overflow-x: auto; overflow-y: visible;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    gap: 12px;
+    margin: 0 -4vw 12px; padding: 0 4vw 12px;
+    background: var(--bg);
+  }
+  .cases-top-row::-webkit-scrollbar,
+  .cases-mid-row::-webkit-scrollbar,
+  .cases-bot-row::-webkit-scrollbar { height: 2px; }
+  .cases-top-row::-webkit-scrollbar-thumb,
+  .cases-mid-row::-webkit-scrollbar-thumb,
+  .cases-bot-row::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 1px; }
+  /* Gradient fade-out on right edge — signals more cards to swipe */
+  .cases-top-row,
+  .cases-mid-row.cases-expanded,
+  .cases-bot-row.cases-expanded {
+    -webkit-mask-image: linear-gradient(to right, black 76%, transparent 100%);
+    mask-image: linear-gradient(to right, black 76%, transparent 100%);
+  }
+  .cases-top-row.at-end,
+  .cases-mid-row.at-end,
+  .cases-bot-row.at-end {
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+  .cases-top-row .case-card,
+  .cases-mid-row .case-card,
+  .cases-bot-row .case-card { flex: 0 0 80vw; scroll-snap-align: start; }
+  .cases-top-row .case-card.big { flex: 0 0 88vw; min-height: 290px; }
   /* Скрываем mid/bot на мобиле до нажатия */
   .cases-mid-row, .cases-bot-row { display: none; }
-  .cases-mid-row.cases-expanded, .cases-bot-row.cases-expanded { display: grid; }
   /* Кнопка «Показать ещё» */
   .cases-more-btn {
     display: flex; /* overrides the global display:none below */
@@ -1149,14 +1204,21 @@ footer {
   .cases-more-btn:active { background: rgba(200,169,110,0.08); }
   .cases-more-btn.hidden { display: none; }
   #cases { padding: 0 4vw 56px; }
-  .case-card { min-height: 220px; transition: background 0.25s; will-change: auto; transform: none !important; }
-  /* Карусель: нативный скролл на мобиле */
+  .case-card { min-height: 220px; transition: background 0.25s; will-change: auto; isolation: isolate; }
+  .case-card.reveal { transform: translateY(40px); }
+  /* Shimmer sweep — золотой блик по карточке */
+  .case-card::before {
+    height: 100%; right: auto; width: 45%;
+    background: linear-gradient(to right, transparent, rgba(200,169,110,0.22) 50%, transparent);
+    opacity: 1; transition: none; pointer-events: none;
+    transform: skewX(-18deg) translateX(-250%);
+    animation: shimmer-swipe 5s 1.2s infinite;
+  }
+  .case-card.open::before { animation: none; opacity: 0; }
+  .cases-mid-row .case-card::before { animation-delay: 2.5s; }
+  .cases-bot-row .case-card::before { animation-delay: 4s; }
+  /* Карусель: не ставить на паузу при тапе (hover: none) */
   .marquee-wrap:hover .marquee-track { animation-play-state: running; }
-  .marquee-wrap { overflow-x: auto; overflow-y: visible; -webkit-overflow-scrolling: touch; padding-bottom: 6px; }
-  .marquee-wrap::-webkit-scrollbar { height: 2px; }
-  .marquee-wrap::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 1px; }
-  .marquee-track { animation: none !important; transform: none !important; flex-wrap: nowrap; }
-  .marquee-track [aria-hidden="true"] { display: none; }
   /* На мобиле фото карточки показывать всегда (нет hover) */
   .case-card::after { opacity: 0.85; }
   .case-card .case-niche,
@@ -1172,19 +1234,18 @@ footer {
   .cta-right .btn-primary { width: 100%; justify-content: center; }
   .cta-hint { border-left: none !important; padding-left: 0 !important; white-space: nowrap; font-size: 12px; text-align: center; }
   .obj-inner { padding: 56px 4vw; }
-  footer { padding: 20px 4vw; display: grid; grid-template-columns: 1fr 1fr; gap: 5px 12px; align-items: start; }
-  .footer-copy { font-size: 11px; grid-column: 1; grid-row: 1; }
-  .footer-links { display: contents; }
-  .footer-links a { font-size: 11px; }
-  .footer-links a:nth-child(1) { grid-column: 1; grid-row: 2; }
-  .footer-links a:nth-child(2) { grid-column: 2; grid-row: 1; text-align: right; }
-  .footer-links a:nth-child(3) { grid-column: 2; grid-row: 2; text-align: right; }
+  footer { padding: 20px 4vw; align-items: flex-start; gap: 8px; }
+  .footer-copy { font-size: 11px; }
+  .footer-links { flex-direction: column; gap: 4px; align-items: flex-end; }
+  .footer-links a { font-size: 11px; text-align: right; }
+  .case-open-hint { animation: hint-pulse 2.2s ease-in-out infinite; }
+  .case-card.open .case-open-hint { animation: none; opacity: 0; }
 }
 
 @media (max-width: 480px) {
   .stats-row { grid-template-columns: 1fr; }
   .stat-cell { border-right: none !important; }
-  .cases-mid-row, .cases-bot-row { grid-template-columns: 1fr; }
+  /* mid/bot rows stay flex (horizontal scroll) on small screens */
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1204,6 +1265,13 @@ footer {
   <a id="btn-ripple-ghost" href="#" target="_blank" rel="noopener"></a>
 </div>
 
+<!-- SVG icons sprite -->
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+  <symbol id="icon-tg" viewBox="0 0 24 24">
+    <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+  </symbol>
+</svg>
+
 <!-- LOADER -->
 <div id="loader">
   <p class="loader-name">Эмиль <em>—</em> Бизнес-ассистент</p>
@@ -1212,10 +1280,10 @@ footer {
 
 <!-- NAV -->
 <nav id="nav">
-  <a class="nav-logo" href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Эмиль</a>
+  <a class="nav-logo" href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Эмиль<span>Бизнес-ассистент</span></a>
   <span class="nav-center">Бизнес-ассистент</span>
   <a class="nav-cta" href="https://t.me/EBorisovv" target="_blank" rel="noopener">
-    Написать мне →
+    <svg class="tg-icon" aria-hidden="true"><use href="#icon-tg"/></svg> Написать мне →
   </a>
 </nav>
 
@@ -1248,7 +1316,7 @@ footer {
       <div class="hero-bottom">
         <div class="hero-bottom-cta">
           <a class="btn-primary btn-hero reveal" href="https://t.me/EBorisovv" target="_blank" rel="noopener" style="transition-delay:.3s">
-            Написать мне <span class="arrow">→</span>
+            <svg class="tg-icon" aria-hidden="true"><use href="#icon-tg"/></svg> Написать мне <span class="arrow">→</span>
           </a>
         </div>
       </div>
@@ -1487,7 +1555,7 @@ footer {
   <div class="cta-right reveal" style="transition-delay:.15s">
     <div style="display:inline-flex;flex-direction:column;align-items:stretch">
       <a class="btn-primary" href="https://t.me/EBorisovv" target="_blank" rel="noopener" style="font-size:14px;padding:18px 40px;justify-content:center">
-        Написать мне* <span class="arrow">→</span>
+        <svg class="tg-icon" aria-hidden="true"><use href="#icon-tg"/></svg> Написать мне* <span class="arrow">→</span>
       </a>
       <p class="cta-hint">*Возможно одно из лучших решений в Вашей жизни</p>
     </div>
@@ -1498,7 +1566,6 @@ footer {
 <footer>
   <span class="footer-copy">Эмиль — бизнес-ассистент &copy; 2026</span>
   <div class="footer-links">
-    <a href="https://t.me/EBorisovv" target="_blank" rel="noopener">Telegram</a>
     <a href="privacy.html">Политика конфиденциальности</a>
     <a href="terms.html">Пользовательское соглашение</a>
   </div>
@@ -1588,6 +1655,7 @@ document.querySelectorAll('.marquee-track').forEach(track => {
     track.addEventListener('touchstart', e => {
       tapX = e.touches[0].clientX;
       tapY = e.touches[0].clientY;
+      track.style.animationPlayState = 'paused';
     }, { passive: true });
     track.addEventListener('touchend', e => {
       const dx = Math.abs(e.changedTouches[0].clientX - tapX);
@@ -1596,6 +1664,7 @@ document.querySelectorAll('.marquee-track').forEach(track => {
       const item = e.target.closest('.marquee-item');
       if (!item) {
         if (detail.classList.contains('open')) closeDetail();
+        else resumeTrack();
         return;
       }
       // Use original data-detail regardless of aria-hidden (clone or original)
@@ -1825,7 +1894,7 @@ if (!isTouch) {
 }
 
 // ── MARQUEE SWIPE (мобиль) ────────────────────────────────
-if (isTouch && !window.matchMedia('(max-width: 767px)').matches) {
+if (isTouch) {
   document.querySelectorAll('.marquee-wrap').forEach(wrap => {
     const track = wrap.querySelector('.marquee-track');
     if (!track) return;
@@ -1846,10 +1915,11 @@ if (isTouch && !window.matchMedia('(max-width: 767px)').matches) {
       }
       if (swiping) {
         const W = track.scrollWidth / 3; // one copy width
-        const raw = startOff + (e.touches[0].clientX - startX);
-        // Allow range [-2W, 0]: pre-copy on right, post-copy on left, never blank
-        const clamped = Math.max(-2 * W, Math.min(0, raw));
-        track.style.transform = `translateX(${clamped}px)`;
+        let pos = startOff + (e.touches[0].clientX - startX);
+        // Wrap for true infinite scroll (all 3 copies are identical)
+        while (pos > 0) pos -= W;
+        while (pos < -2 * W) pos += W;
+        track.style.transform = `translateX(${pos}px)`;
       }
     }, { passive: true });
     wrap.addEventListener('touchend', () => {
@@ -1879,6 +1949,32 @@ if (isTouch && !window.matchMedia('(max-width: 767px)').matches) {
       swiping = false;
     });
   });
+}
+
+// ── CASES SWIPE HINTS (мобиль) ───────────────────────────
+if (isTouch) {
+  // Variant 1: remove right-edge fade mask when scrolled to last card
+  document.querySelectorAll('.cases-top-row, .cases-mid-row, .cases-bot-row').forEach(row => {
+    row.addEventListener('scroll', () => {
+      row.classList.toggle('at-end', row.scrollLeft + row.clientWidth >= row.scrollWidth - 28);
+    }, { passive: true });
+  });
+
+  // Variant 5: one-time swipe nudge animation when cases section enters view
+  const casesSection = document.getElementById('cases');
+  if (casesSection) {
+    const nudgeObserver = new IntersectionObserver(entries => {
+      if (!entries[0].isIntersecting) return;
+      nudgeObserver.disconnect();
+      const topRow = document.querySelector('.cases-top-row');
+      if (!topRow) return;
+      setTimeout(() => {
+        topRow.scrollTo({ left: 80, behavior: 'smooth' });
+        setTimeout(() => topRow.scrollTo({ left: 0, behavior: 'smooth' }), 680);
+      }, 700);
+    }, { threshold: 0.35 });
+    nudgeObserver.observe(casesSection);
+  }
 }
 
 // Mobile: «Показать ещё проекты»
