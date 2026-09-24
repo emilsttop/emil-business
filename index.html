@@ -829,6 +829,11 @@ nav.scrolled {
   from { transform: translateX(-33.333%); }
   to   { transform: translateX(-66.667%); }
 }
+@keyframes shimmer-swipe {
+  0%   { transform: skewX(-18deg) translateX(-250%); }
+  40%  { transform: skewX(-18deg) translateX(450%); }
+  100% { transform: skewX(-18deg) translateX(450%); }
+}
 .marquee-item {
   display: inline-block;
   padding: 14px 32px;
@@ -1151,9 +1156,19 @@ footer {
   .cases-more-btn:active { background: rgba(200,169,110,0.08); }
   .cases-more-btn.hidden { display: none; }
   #cases { padding: 0 4vw 56px; }
-  .case-card { min-height: 220px; transition: background 0.25s, border-color 0.3s; will-change: auto; border-left: 2px solid rgba(200,169,110,0.38); }
-  .case-card.open { border-left-color: var(--gold); }
+  .case-card { min-height: 220px; transition: background 0.25s; will-change: auto; }
   .case-card.reveal { transform: translateY(40px); }
+  /* Shimmer sweep — золотой блик по карточке */
+  .case-card::before {
+    height: 100%; right: auto; width: 45%;
+    background: linear-gradient(to right, transparent, rgba(200,169,110,0.22) 50%, transparent);
+    opacity: 1; transition: none; pointer-events: none;
+    transform: skewX(-18deg) translateX(-250%);
+    animation: shimmer-swipe 5s 1.2s infinite;
+  }
+  .case-card.open::before { animation: none; opacity: 0; }
+  .cases-mid-row .case-card::before { animation-delay: 2.5s; }
+  .cases-bot-row .case-card::before { animation-delay: 4s; }
   /* Карусель: не ставить на паузу при тапе (hover: none) */
   .marquee-wrap:hover .marquee-track { animation-play-state: running; }
   /* На мобиле фото карточки показывать всегда (нет hover) */
