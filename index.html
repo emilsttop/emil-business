@@ -325,6 +325,7 @@ nav.scrolled {
 }
 
 /* ── BUTTONS ────────────────────────────────────────────── */
+.tg-icon { width: 18px; height: 18px; flex-shrink: 0; fill: currentColor; }
 .btn-primary {
   display: inline-flex; align-items: center; gap: 10px;
   padding: 16px 32px;
@@ -1167,13 +1168,11 @@ footer {
   .cta-right .btn-primary { width: 100%; justify-content: center; }
   .cta-hint { border-left: none !important; padding-left: 0 !important; white-space: nowrap; font-size: 12px; text-align: center; }
   .obj-inner { padding: 56px 4vw; }
-  footer { padding: 20px 4vw; display: grid; grid-template-columns: 1fr 1fr; gap: 5px 12px; align-items: start; }
-  .footer-copy { font-size: 11px; grid-column: 1; grid-row: 1; }
-  .footer-links { display: contents; }
+  footer { padding: 20px 4vw; flex-direction: column; align-items: flex-start; gap: 10px; }
+  .footer-copy { font-size: 11px; }
+  .footer-links { gap: 12px; }
   .footer-links a { font-size: 11px; }
-  .footer-links a:nth-child(1) { grid-column: 1; grid-row: 2; }
-  .footer-links a:nth-child(2) { grid-column: 2; grid-row: 1; text-align: right; }
-  .footer-links a:nth-child(3) { grid-column: 2; grid-row: 2; text-align: right; }
+  .case-open-hint { opacity: 0.8; }
 }
 
 @media (max-width: 480px) {
@@ -1199,6 +1198,13 @@ footer {
   <a id="btn-ripple-ghost" href="#" target="_blank" rel="noopener"></a>
 </div>
 
+<!-- SVG icons sprite -->
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+  <symbol id="icon-tg" viewBox="0 0 24 24">
+    <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+  </symbol>
+</svg>
+
 <!-- LOADER -->
 <div id="loader">
   <p class="loader-name">Эмиль <em>—</em> Бизнес-ассистент</p>
@@ -1210,7 +1216,7 @@ footer {
   <a class="nav-logo" href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Эмиль</a>
   <span class="nav-center">Бизнес-ассистент</span>
   <a class="nav-cta" href="https://t.me/EBorisovv" target="_blank" rel="noopener">
-    Написать мне →
+    <svg class="tg-icon" aria-hidden="true"><use href="#icon-tg"/></svg> Написать мне →
   </a>
 </nav>
 
@@ -1243,7 +1249,7 @@ footer {
       <div class="hero-bottom">
         <div class="hero-bottom-cta">
           <a class="btn-primary btn-hero reveal" href="https://t.me/EBorisovv" target="_blank" rel="noopener" style="transition-delay:.3s">
-            Написать мне <span class="arrow">→</span>
+            <svg class="tg-icon" aria-hidden="true"><use href="#icon-tg"/></svg> Написать мне <span class="arrow">→</span>
           </a>
         </div>
       </div>
@@ -1482,7 +1488,7 @@ footer {
   <div class="cta-right reveal" style="transition-delay:.15s">
     <div style="display:inline-flex;flex-direction:column;align-items:stretch">
       <a class="btn-primary" href="https://t.me/EBorisovv" target="_blank" rel="noopener" style="font-size:14px;padding:18px 40px;justify-content:center">
-        Написать мне* <span class="arrow">→</span>
+        <svg class="tg-icon" aria-hidden="true"><use href="#icon-tg"/></svg> Написать мне* <span class="arrow">→</span>
       </a>
       <p class="cta-hint">*Возможно одно из лучших решений в Вашей жизни</p>
     </div>
@@ -1493,7 +1499,6 @@ footer {
 <footer>
   <span class="footer-copy">Эмиль — бизнес-ассистент &copy; 2026</span>
   <div class="footer-links">
-    <a href="https://t.me/EBorisovv" target="_blank" rel="noopener">Telegram</a>
     <a href="privacy.html">Политика конфиденциальности</a>
     <a href="terms.html">Пользовательское соглашение</a>
   </div>
@@ -1843,10 +1848,11 @@ if (isTouch) {
       }
       if (swiping) {
         const W = track.scrollWidth / 3; // one copy width
-        const raw = startOff + (e.touches[0].clientX - startX);
-        // Allow range [-2W, 0]: pre-copy on right, post-copy on left, never blank
-        const clamped = Math.max(-2 * W, Math.min(0, raw));
-        track.style.transform = `translateX(${clamped}px)`;
+        let pos = startOff + (e.touches[0].clientX - startX);
+        // Wrap for true infinite scroll (all 3 copies are identical)
+        while (pos > 0) pos -= W;
+        while (pos < -2 * W) pos += W;
+        track.style.transform = `translateX(${pos}px)`;
       }
     }, { passive: true });
     wrap.addEventListener('touchend', () => {
