@@ -1157,6 +1157,19 @@ footer {
   .cases-top-row::-webkit-scrollbar-thumb,
   .cases-mid-row::-webkit-scrollbar-thumb,
   .cases-bot-row::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 1px; }
+  /* Gradient fade-out on right edge — signals more cards to swipe */
+  .cases-top-row,
+  .cases-mid-row.cases-expanded,
+  .cases-bot-row.cases-expanded {
+    -webkit-mask-image: linear-gradient(to right, black 76%, transparent 100%);
+    mask-image: linear-gradient(to right, black 76%, transparent 100%);
+  }
+  .cases-top-row.at-end,
+  .cases-mid-row.at-end,
+  .cases-bot-row.at-end {
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
   .cases-top-row .case-card,
   .cases-mid-row .case-card,
   .cases-bot-row .case-card { flex: 0 0 80vw; scroll-snap-align: start; }
@@ -1931,6 +1944,32 @@ if (isTouch) {
       swiping = false;
     });
   });
+}
+
+// ── CASES SWIPE HINTS (мобиль) ───────────────────────────
+if (isTouch) {
+  // Variant 1: remove right-edge fade mask when scrolled to last card
+  document.querySelectorAll('.cases-top-row, .cases-mid-row, .cases-bot-row').forEach(row => {
+    row.addEventListener('scroll', () => {
+      row.classList.toggle('at-end', row.scrollLeft + row.clientWidth >= row.scrollWidth - 28);
+    }, { passive: true });
+  });
+
+  // Variant 5: one-time swipe nudge animation when cases section enters view
+  const casesSection = document.getElementById('cases');
+  if (casesSection) {
+    const nudgeObserver = new IntersectionObserver(entries => {
+      if (!entries[0].isIntersecting) return;
+      nudgeObserver.disconnect();
+      const topRow = document.querySelector('.cases-top-row');
+      if (!topRow) return;
+      setTimeout(() => {
+        topRow.scrollTo({ left: 80, behavior: 'smooth' });
+        setTimeout(() => topRow.scrollTo({ left: 0, behavior: 'smooth' }), 680);
+      }, 700);
+    }, { threshold: 0.35 });
+    nudgeObserver.observe(casesSection);
+  }
 }
 
 // Mobile: «Показать ещё проекты»
