@@ -381,12 +381,12 @@ nav.scrolled {
 }
 @keyframes wave-soft-pulse {
   0%   { transform: scale(0);   opacity: 0.5; background: #C8A96E; }
-  100% { transform: scale(220); opacity: 0;   background: #E8C878; }
+  100% { transform: scale(var(--ripple-pulse-scale, 220)); opacity: 0;   background: #E8C878; }
 }
 @keyframes wave-soft-fill {
   0%   { transform: scale(0);   opacity: 0;  background: #C8A96E; }
   20%  { background: #D4B87A; }
-  100% { transform: scale(320); opacity: 1;  background: #F0E0A0; }
+  100% { transform: scale(var(--ripple-fill-scale, 320)); opacity: 1;  background: #F0E0A0; }
 }
 #btn-ripple-text {
   position: fixed; z-index: 201;
@@ -1751,6 +1751,18 @@ document.querySelectorAll('.tl-item').forEach(el => tlObserver.observe(el));
       if (b !== btn) b.style.zIndex = '1';
     });
     btn.style.opacity = '0';
+
+    // Волна (10px, радиус 5px) должна дорасти до самого дальнего угла экрана
+    const bx = rect.left + rect.width / 2;
+    const by = rect.top + rect.height / 2;
+    const reach = Math.hypot(
+      Math.max(bx, window.innerWidth - bx),
+      Math.max(by, window.innerHeight - by)
+    );
+    const fillScale = Math.ceil(reach / 5) + 4;
+    rippleOverlay.style.setProperty('--ripple-fill-scale', fillScale);
+    rippleOverlay.style.setProperty('--ripple-pulse-scale', Math.round(fillScale * 0.69));
+
     rippleOverlay.classList.add('active');
     const sb = window.innerWidth - document.documentElement.clientWidth;
     document.body.style.paddingRight = sb + 'px';
