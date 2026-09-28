@@ -960,6 +960,8 @@ nav.scrolled {
   transition: opacity 0.3s;
   opacity: 0;
 }
+/* На тач-экранах тап шлёт синтетический mousemove, и пятно залипает на месте касания */
+@media (hover: none) { #spotlight { display: none; } }
 
 /* ── PARALLAX HERO PHOTO ────────────────────────────────── */
 .hero-bg-main { will-change: transform; transform: scale(1.08); transform-origin: center top; backface-visibility: hidden; }
@@ -1325,11 +1327,13 @@ footer {
   .cases-mid-row.cases-expanded,
   .cases-bot-row.cases-expanded {
     display: flex; flex-wrap: nowrap;
-    overflow-x: auto; overflow-y: visible;
+    /* overflow-y: visible при overflow-x: auto по спецификации становится auto —
+       карусель начинала скроллиться и по вертикали. Нижний паддинг держит тень карточек. */
+    overflow-x: auto; overflow-y: hidden;
     -webkit-overflow-scrolling: touch;
     scroll-snap-type: x mandatory;
     gap: 12px;
-    margin: 0 -4vw 12px; padding: 0 4vw 12px;
+    margin: 0 -4vw -8px; padding: 0 4vw 32px;
     background: var(--bg);
   }
   .cases-top-row::-webkit-scrollbar,
@@ -2081,12 +2085,14 @@ document.querySelectorAll('.tl-item').forEach(el => tlObserver.observe(el));
 
 // ── CURSOR SPOTLIGHT ─────────────────────────────────────
 const spotlight = document.getElementById('spotlight');
-document.addEventListener('mousemove', e => {
-  spotlight.style.left = e.clientX + 'px';
-  spotlight.style.top  = e.clientY + 'px';
-  spotlight.style.opacity = '1';
-});
-document.addEventListener('mouseleave', () => { spotlight.style.opacity = '0'; });
+if (!isTouch) {
+  document.addEventListener('mousemove', e => {
+    spotlight.style.left = e.clientX + 'px';
+    spotlight.style.top  = e.clientY + 'px';
+    spotlight.style.opacity = '1';
+  });
+  document.addEventListener('mouseleave', () => { spotlight.style.opacity = '0'; });
+}
 
 // ── PARALLAX HERO PHOTO ──────────────────────────────────
 const heroBg = document.querySelector('.hero-bg-main');
