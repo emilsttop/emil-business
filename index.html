@@ -176,9 +176,16 @@ nav.scrolled {
   display: block;
   /* Синий дневной кадр уводим в золото палитры, цвет при этом сохраняем */
   filter: brightness(0.62) contrast(1.1) sepia(0.55) saturate(1.25) hue-rotate(-6deg);
-  /* Левый край растворяем — иначе видна резкая граница фото */
-  -webkit-mask-image: linear-gradient(to right, transparent 0%, rgba(0,0,0,0.5) 14%, #000 34%);
-  mask-image: linear-gradient(to right, transparent 0%, rgba(0,0,0,0.5) 14%, #000 34%);
+  /* Левый край растворяем длинной S-кривой — иначе видна граница фото.
+     Затухание закончено к 38% ширины кадра, где начинается силуэт. */
+  -webkit-mask-image: linear-gradient(to right,
+    transparent 0%, rgba(0,0,0,0.04) 5%, rgba(0,0,0,0.12) 9%, rgba(0,0,0,0.24) 13%,
+    rgba(0,0,0,0.38) 17%, rgba(0,0,0,0.54) 21%, rgba(0,0,0,0.70) 25%,
+    rgba(0,0,0,0.84) 29%, rgba(0,0,0,0.94) 33%, #000 38%);
+  mask-image: linear-gradient(to right,
+    transparent 0%, rgba(0,0,0,0.04) 5%, rgba(0,0,0,0.12) 9%, rgba(0,0,0,0.24) 13%,
+    rgba(0,0,0,0.38) 17%, rgba(0,0,0,0.54) 21%, rgba(0,0,0,0.70) 25%,
+    rgba(0,0,0,0.84) 29%, rgba(0,0,0,0.94) 33%, #000 38%);
 }
 
 .hero-bg-overlay {
@@ -187,12 +194,17 @@ nav.scrolled {
   background:
     linear-gradient(to right,
       rgba(10,10,10,1)    0%,
-      rgba(10,10,10,1)    26%,
-      rgba(10,10,10,0.92) 34%,
-      rgba(10,10,10,0.72) 42%,
-      rgba(10,10,10,0.42) 50%,
-      rgba(10,10,10,0.16) 58%,
-      rgba(10,10,10,0)    66%
+      rgba(10,10,10,1)    24%,
+      rgba(10,10,10,0.97) 30%,
+      rgba(10,10,10,0.90) 36%,
+      rgba(10,10,10,0.79) 42%,
+      rgba(10,10,10,0.65) 48%,
+      rgba(10,10,10,0.49) 54%,
+      rgba(10,10,10,0.34) 60%,
+      rgba(10,10,10,0.20) 66%,
+      rgba(10,10,10,0.09) 72%,
+      rgba(10,10,10,0.03) 78%,
+      rgba(10,10,10,0)    84%
     ),
     linear-gradient(to bottom,
       rgba(10,10,10,0.4) 0%,
@@ -534,6 +546,26 @@ nav.scrolled {
 }
 .result-title em { font-style: italic; color: var(--gold); }
 .result-desc { font-size: 14px; line-height: 1.75; color: var(--text-dim); }
+
+/* Главный результат — выделяем золотом */
+.result-card--accent {
+  background:
+    linear-gradient(135deg, rgba(200,169,110,0.13) 0%, rgba(200,169,110,0.04) 45%, rgba(10,10,10,1) 100%);
+  box-shadow: inset 0 0 0 1px rgba(200,169,110,0.38);
+}
+.result-card--accent .result-title { color: var(--gold); }
+.result-card--accent .result-title em { color: var(--text); }
+.result-card--accent .result-desc { color: rgba(245,245,245,0.72); }
+.result-badge {
+  align-self: flex-start;
+  font-family: 'Jost', sans-serif;
+  font-size: 10px; font-weight: 500;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--gold);
+  border: 1px solid var(--gold-dim);
+  padding: 5px 11px;
+  margin-bottom: 2px;
+}
 
 /* ── САЙТ КАК КЕЙС ──────────────────────────────────────── */
 #site-case { padding: 90px 8vw 100px; }
@@ -1480,7 +1512,7 @@ footer {
   <section id="about">
     <div class="about-col-label reveal">
       <span class="section-kicker"><b>01</b> Обо мне</span>
-      <span class="section-label">Обо <span>мне</span></span>
+      <span class="section-label">Кто я <span>и что уже сделал</span></span>
     </div>
     <div class="about-col-text">
       <p class="about-text reveal" style="transition-delay:.1s">
@@ -1643,13 +1675,25 @@ footer {
     <div class="marquee-wrap reveal" style="transition-delay:.1s">
       <div class="marquee-track" id="marquee-hard">
         <span class="marquee-item" data-detail="Приложения, сайты, автоматизация процессов, генерация и обработка фото и видео — всё через ИИ">Работа с ИИ</span>
-        <span class="marquee-item" data-detail="Превращаю разрозненные данные в единую систему: финансы, маркетинг, продажи — в одной картине">Аналитика</span>
-        <span class="marquee-item" data-detail="10+ сайтов в разных нишах. Структура, текст, конверсия — с нуля под вашу задачу">Продающие сайты</span>
+        <span class="marquee-item" data-detail="Веду проект от идеи до сдачи: этапы, сроки, ответственные. Вы видите статус в любой момент и не спрашиваете «что там»">Управление проектами</span>
+        <span class="marquee-item" data-detail="Ставлю задачи команде от вашего лица и довожу до исполнения. Контроль сроков — на мне, а не на вас">Задачи команды</span>
+        <span class="marquee-item" data-detail="Бриф, поиск, отбор, ТЗ, приёмка работ. Нахожу исполнителей и отвечаю за результат перед вами">Работа с подрядчиками</span>
+        <span class="marquee-item" data-detail="Бюджеты, сметы, P&amp;L. Считаю экономику решений и показываю, где деньги уходят впустую">Финансы и отчётность</span>
+        <span class="marquee-item" data-detail="Планирую день так, чтобы приоритеты не тонули в текучке. За вашим временем слежу внимательнее, чем за своим">Календарь руководителя</span>
+        <span class="marquee-item" data-detail="Повестка, протокол, задачи по итогам. Встреча заканчивается решениями, а не разговорами">Организация совещаний</span>
+        <span class="marquee-item" data-detail="Договоры, счета, акты, закрывающие документы. Готовлю, согласую и держу сроки под контролем">Документооборот</span>
+        <span class="marquee-item" data-detail="Веду переписку от вашего лица: коротко, по делу, без потери смысла и репутации">Деловая переписка</span>
+        <span class="marquee-item" data-detail="Битрикс24, Kaiten, Notion, Яндекс.Вики. Собираю задачи и знания компании в систему, где ничего не теряется">Таск-менеджеры</span>
         <span class="marquee-item" data-detail="Преимущественно Битрикс24, но разберусь в любой системе и настрою под ваш бизнес">CRM-системы</span>
-        <span class="marquee-item" data-detail="Создание объявлений, анализ конкурентов, вывод в топ, стратегия продвижения">Авито</span>
-        <span class="marquee-item" data-detail="Съёмка и монтаж в разных форматах и нишах. Анализирую тренды — нахожу формат, который сработает">Видеоконтент</span>
+        <span class="marquee-item" data-detail="Превращаю разрозненные данные в единую систему: финансы, маркетинг, продажи — в одной картине">Аналитика</span>
+        <span class="marquee-item" data-detail="Материалы для партнёров, инвесторов и команды: структура, цифры, аккуратный визуал">Презентации</span>
+        <span class="marquee-item" data-detail="Вакансия, отбор, собеседование, проверка кандидата. Закрываю позиции в команду и ввожу в работу">Подбор персонала</span>
+        <span class="marquee-item" data-detail="Билеты, отели, маршруты, документы. Поездка спланирована до мелочей — вам остаётся только приехать">Travel-поддержка</span>
         <span class="marquee-item" data-detail="Нахожу, где бизнес теряет время и деньги — и системно это устраняю">Оптимизация процессов</span>
         <span class="marquee-item" data-detail="Большой опыт в B2C и B2B: партнёры, подрядчики, конкуренты — нахожу язык с любой стороной">Переговоры</span>
+        <span class="marquee-item" data-detail="10+ сайтов в разных нишах. Структура, текст, конверсия — с нуля под вашу задачу">Продающие сайты</span>
+        <span class="marquee-item" data-detail="Создание объявлений, анализ конкурентов, вывод в топ, стратегия продвижения">Авито</span>
+        <span class="marquee-item" data-detail="Съёмка и монтаж в разных форматах и нишах. Анализирую тренды — нахожу формат, который сработает">Видеоконтент</span>
         <span class="marquee-item" data-detail="Работа с зарубежными источниками, документами и партнёрами без переводчика">Английский B2</span>
       </div>
     </div>
@@ -1657,6 +1701,9 @@ footer {
     <p class="skills-group-head reveal" style="margin-top:48px;transition-delay:.15s">Софт скилы</p>
     <div class="marquee-wrap reveal" style="transition-delay:.2s">
       <div class="marquee-track" id="marquee-soft">
+        <span class="marquee-item" data-detail="Смотрю на задачу как руководитель: через деньги, сроки и последствия для бизнеса, а не через «сделано — не сделано»">Бизнес-мышление</span>
+        <span class="marquee-item" data-detail="Не жду постановки задач: вижу, что нужно сделать, и делаю до того, как вы об этом попросите">Проактивность</span>
+        <span class="marquee-item" data-detail="Доступ к финансам, контактам и личным вопросам. Что остаётся внутри — остаётся внутри. Всегда">Конфиденциальность</span>
         <span class="marquee-item" data-detail="Взял задачу — значит, закрою. Без отговорок, в срок, с результатом">Довожу до результата</span>
         <span class="marquee-item" data-detail="За короткое время разбираюсь в новой нише: рынок, конкуренты, продукт. Готов к работе раньше, чем вы ожидаете">Быстрое погружение</span>
         <span class="marquee-item" data-detail="Вижу бизнес как единый механизм: нахожу связи между процессами и цифрами там, где другие видят отдельные задачи">Системное мышление</span>
@@ -1724,7 +1771,8 @@ footer {
       <h3 class="result-title">Закрытые <em>задачи</em></h3>
       <p class="result-desc">Без напоминаний, микроменеджмента и возврата на доработку. Поставили задачу&nbsp;— можете о ней забыть.</p>
     </div>
-    <div class="result-card reveal" style="transition-delay:.1s">
+    <div class="result-card result-card--accent reveal" style="transition-delay:.1s">
+      <span class="result-badge">Главное</span>
       <h3 class="result-title">Рост чистой <em>прибыли</em></h3>
       <p class="result-desc">Нахожу, где бизнес теряет деньги, и устраняю. Моя цель&nbsp;— не закрытые задачи сами по себе, а ваша прибыль.</p>
     </div>
