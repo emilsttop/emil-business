@@ -1385,7 +1385,9 @@ footer {
   .cases-more-btn.hidden { display: none; }
   #cases { padding: 0 4vw 56px; }
   .case-card { min-height: 220px; transition: background 0.25s; will-change: auto; isolation: isolate; }
-  .case-card.reveal { transform: translateY(40px); }
+  /* В горизонтальной карусели observer срабатывает на каждую карточку при свайпе,
+     и вертикальный сдвиг читается как подпрыгивание. Оставляем только прозрачность. */
+  .case-card.reveal { transform: none; }
   /* Shimmer sweep — золотой блик по карточке */
   .case-card::before {
     height: 100%; right: auto; width: 45%;
