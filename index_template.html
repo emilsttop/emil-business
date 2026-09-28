@@ -440,13 +440,142 @@ nav.scrolled {
   margin-bottom: 48px;
 }
 
+/* ── ИЕРАРХИЯ РАЗДЕЛОВ ──────────────────────────────────── */
+.section-kicker {
+  display: flex; align-items: center; gap: 10px;
+  font-family: 'Jost', sans-serif;
+  font-size: 11px; font-weight: 500;
+  letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 16px;
+}
+.section-kicker::before {
+  content: ''; flex: 0 0 auto;
+  width: 26px; height: 1px; background: var(--gold-dim);
+}
+.section-kicker b { font-weight: 500; opacity: 0.5; }
+.section-lead {
+  font-family: 'Jost', sans-serif;
+  font-size: clamp(14px, 1.2vw, 16px);
+  line-height: 1.75; color: var(--text-dim);
+  max-width: 640px;
+}
+.section-lead strong { color: var(--text); font-weight: 400; }
+.cases-header .section-label,
+.skills-inner .section-label { margin-bottom: 22px; }
+.key-point {
+  border-left: 2px solid var(--gold);
+  background: var(--gold-faint);
+  padding: 20px 26px;
+  font-family: 'Jost', sans-serif;
+  font-size: clamp(14px, 1.2vw, 16px);
+  line-height: 1.7; color: var(--text);
+}
+.key-point strong { color: var(--gold); font-weight: 500; }
+
+/* ── ОФФЕР: что беру на себя ────────────────────────────── */
+.offer-list { list-style: none; display: flex; flex-direction: column; gap: 13px; }
+.offer-list li {
+  position: relative; padding-left: 26px;
+  font-family: 'Jost', sans-serif;
+  font-size: clamp(14px, 1.15vw, 16px);
+  line-height: 1.65; color: var(--text-dim);
+}
+.offer-list li::before {
+  content: ''; position: absolute; left: 0; top: 0.68em;
+  width: 13px; height: 1px; background: var(--gold);
+}
+.offer-list strong { color: var(--text); font-weight: 400; }
+
+/* ── ФОРМАТ РАБОТЫ ──────────────────────────────────────── */
+#process { padding: 100px 8vw; }
+.process-head { margin-bottom: 56px; }
+.process-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 1px; background: var(--border-faint);
+}
+.process-step {
+  background: var(--bg); padding: 38px 30px;
+  display: flex; flex-direction: column; gap: 13px;
+  transition: background 0.25s;
+}
+.process-step:hover { background: var(--bg2); }
+.process-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 46px; font-weight: 300; font-style: italic;
+  line-height: 1; color: var(--gold);
+}
+.process-title {
+  font-family: 'Jost', sans-serif;
+  font-size: 15px; font-weight: 500; letter-spacing: 0.03em; color: var(--text);
+}
+.process-desc { font-size: 14px; line-height: 1.7; color: var(--text-dim); }
+.process-note { margin-top: 40px; }
+
+/* ── РЕЗУЛЬТАТЫ ─────────────────────────────────────────── */
+#results { padding: 100px 8vw; }
+.results-head { margin-bottom: 56px; }
+.results-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr);
+  gap: 1px; background: var(--border-faint);
+}
+.result-card {
+  background: var(--bg); padding: 44px 40px;
+  display: flex; flex-direction: column; gap: 14px;
+  transition: background 0.25s;
+}
+.result-card:hover { background: var(--bg2); }
+.result-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(25px, 2.3vw, 33px);
+  font-weight: 300; line-height: 1.2; color: var(--text);
+}
+.result-title em { font-style: italic; color: var(--gold); }
+.result-desc { font-size: 14px; line-height: 1.75; color: var(--text-dim); }
+
+/* ── САЙТ КАК КЕЙС ──────────────────────────────────────── */
+#site-case { padding: 90px 8vw 100px; }
+.site-case-box {
+  border: 1px solid var(--border);
+  background: linear-gradient(135deg, var(--gold-faint) 0%, transparent 55%);
+  padding: 54px 56px;
+  display: grid; grid-template-columns: 1fr 260px; gap: 56px; align-items: center;
+}
+.site-case-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(27px, 2.7vw, 38px);
+  font-weight: 300; line-height: 1.25; color: var(--text);
+}
+.site-case-title em { font-style: italic; color: var(--gold); }
+.site-case-text {
+  font-family: 'Jost', sans-serif;
+  font-size: 15px; line-height: 1.8; color: var(--text-dim); margin-top: 20px;
+}
+.site-case-text strong { color: var(--text); font-weight: 400; }
+.site-case-stats { display: flex; flex-direction: column; gap: 26px; }
+.site-case-stat b {
+  display: block;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 40px; font-weight: 300; font-style: italic;
+  color: var(--gold); line-height: 1; margin-bottom: 6px;
+}
+.site-case-stat span {
+  font-family: 'Jost', sans-serif;
+  font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-muted);
+}
+@media (max-width: 1100px) {
+  .process-grid { grid-template-columns: repeat(2, 1fr); }
+  .site-case-box { grid-template-columns: 1fr; gap: 36px; padding: 44px 40px; }
+  .site-case-stats { flex-direction: row; gap: 40px; }
+}
+
 /* ── ABOUT ──────────────────────────────────────────────── */
 #about {
   padding: 100px 8vw;
   display: grid; grid-template-columns: 240px 1fr; gap: 80px;
   align-items: center;
 }
-.about-col-label { display: flex; align-items: center; justify-content: flex-start; }
+.about-col-label { display: flex; flex-direction: column; align-items: flex-start; justify-content: center; }
 .about-col-text { display: flex; flex-direction: column; gap: 20px; }
 #about .section-label {
   font-family: 'Cormorant Garamond', serif;
@@ -1138,6 +1267,18 @@ footer {
 
   #about { grid-template-columns: 1fr; gap: 24px; padding: 56px 4vw; }
   #stats { padding: 0 4vw; }
+  #process, #results { padding: 56px 4vw; }
+  #site-case { padding: 56px 4vw 64px; }
+  .process-head, .results-head { margin-bottom: 36px; }
+  .process-grid, .results-grid { grid-template-columns: 1fr; }
+  .process-step { padding: 28px 22px; }
+  .process-num { font-size: 38px; }
+  .result-card { padding: 30px 22px; }
+  .process-note { margin-top: 28px; }
+  .key-point { padding: 18px 20px; }
+  .site-case-box { grid-template-columns: 1fr; padding: 32px 24px; gap: 30px; }
+  .site-case-stats { flex-direction: row; flex-wrap: wrap; gap: 24px 32px; }
+  .site-case-stat b { font-size: 32px; }
   .stats-row { grid-template-columns: 1fr 1fr; }
   .stat-cell { border-right: none; border-bottom: 1px solid var(--border-faint); padding: 20px 0; }
   .stat-cell:nth-child(odd) { border-right: 1px solid var(--border-faint); padding-right: 12px; }
@@ -1335,6 +1476,7 @@ footer {
 <div class="section-divider">
   <section id="about">
     <div class="about-col-label reveal">
+      <span class="section-kicker"><b>01</b> Обо мне</span>
       <span class="section-label">Обо <span>мне</span></span>
     </div>
     <div class="about-col-text">
@@ -1344,7 +1486,14 @@ footer {
         автомойки на 20&nbsp;млн, Telegram-приложение без аналогов в СНГ, офлайн и онлайн бизнесы.
         В каждой нише довожу дело до <strong>результата</strong> и <strong>закрываю задачи сам</strong>&nbsp;— без частых вопросов и долгих согласований.
       </p>
-      <p class="about-proof reveal" style="transition-delay:.2s">
+      <p class="skills-group-head reveal" style="transition-delay:.15s">Что беру на себя</p>
+      <ul class="offer-list reveal" style="transition-delay:.2s">
+        <li><strong>Операционку и рутину</strong>&nbsp;— снимаю с вас полностью, чтобы вы занимались развитием, а не текучкой</li>
+        <li><strong>Задачи закрываю сам</strong>&nbsp;— без напоминаний, контроля и возврата на доработку</li>
+        <li><strong>Точки потерь</strong>&nbsp;— нахожу, где бизнес теряет время и деньги, и системно это устраняю</li>
+        <li><strong>Автоматизацию через ИИ</strong>&nbsp;— то, что раньше делали руками и неделями, начинает работать само</li>
+      </ul>
+      <p class="about-proof reveal" style="transition-delay:.25s">
         Это не просто слова. Дальше&nbsp;— <strong>конкретные кейсы с цифрами</strong>.
       </p>
     </div>
@@ -1355,7 +1504,9 @@ footer {
 <!-- CASES -->
 <section id="cases" class="section-divider">
   <div class="cases-header">
+    <span class="section-kicker reveal"><b>02</b> Опыт</span>
     <span class="section-label cases-section-label reveal">Мой опыт.<br><span>Мои проекты</span></span>
+    <p class="section-lead reveal" style="transition-delay:.1s">Проекты в разных нишах&nbsp;— от автомоек и общепита до Telegram-приложения без аналогов в СНГ. <strong>Каждый кейс&nbsp;— с конкретной цифрой результата.</strong></p>
   </div>
   <div class="cases-top-row">
     <div class="case-card big reveal-fade" style="--card-bg-img: url('img/avtomojki.jpg')">
@@ -1482,7 +1633,9 @@ footer {
 <!-- SKILLS — ВАРИАНТ G: Бегущая строка + раскрытие -->
 <section id="skills" class="section-divider">
   <div class="skills-inner">
+    <span class="section-kicker reveal"><b>03</b> Навыки</span>
     <span class="section-label skills-section-label reveal">Чем я полезен<br><span>для Вас</span></span>
+    <p class="section-lead reveal" style="transition-delay:.1s">Инструменты, которыми закрываю задачи. <strong>Нажмите на любой навык</strong>&nbsp;— расскажу, как применяю его на практике.</p>
     <p class="skills-group-head reveal" style="margin-top:40px">Хард скилы</p>
     <div class="marquee-wrap reveal" style="transition-delay:.1s">
       <div class="marquee-track" id="marquee-hard">
@@ -1518,9 +1671,71 @@ footer {
   </div>
 </section>
 
+<!-- ФОРМАТ РАБОТЫ -->
+<section id="process" class="section-divider">
+  <div class="process-head">
+    <span class="section-kicker reveal"><b>04</b> Формат работы</span>
+    <span class="section-label cases-section-label reveal">Как мы<br><span>будем работать</span></span>
+    <p class="section-lead reveal" style="transition-delay:.1s">Без долгого онбординга и постоянных согласований. <strong>Вы ставите цель&nbsp;— я закрываю путь к ней.</strong></p>
+  </div>
+  <div class="process-grid">
+    <div class="process-step reveal">
+      <span class="process-num">01</span>
+      <h3 class="process-title">Погружение</h3>
+      <p class="process-desc">За первую неделю разбираюсь в нише, процессах и цифрах. Готов к работе раньше, чем вы ожидаете.</p>
+    </div>
+    <div class="process-step reveal" style="transition-delay:.05s">
+      <span class="process-num">02</span>
+      <h3 class="process-title">Приоритеты</h3>
+      <p class="process-desc">Вместе определяем, что закрываю первым. Вы называете цель&nbsp;— я предлагаю путь.</p>
+    </div>
+    <div class="process-step reveal" style="transition-delay:.1s">
+      <span class="process-num">03</span>
+      <h3 class="process-title">Работа</h3>
+      <p class="process-desc">Закрываю задачи сам. Не дёргаю по мелочам: прихожу с решением, а не с вопросом.</p>
+    </div>
+    <div class="process-step reveal" style="transition-delay:.15s">
+      <span class="process-num">04</span>
+      <h3 class="process-title">Отчётность</h3>
+      <p class="process-desc">Регулярно: что сделано, что в работе, что дальше. На связи в Telegram или Zoom.</p>
+    </div>
+  </div>
+  <div class="key-point process-note reveal" style="transition-delay:.2s">
+    Начинаем с <strong>испытательного периода</strong>&nbsp;— вы видите результат прежде, чем принимаете финальное решение.
+  </div>
+</section>
+
+<!-- РЕЗУЛЬТАТЫ -->
+<section id="results" class="section-divider">
+  <div class="results-head">
+    <span class="section-kicker reveal"><b>05</b> Результаты</span>
+    <span class="section-label cases-section-label reveal">Что вы<br><span>получаете</span></span>
+    <p class="section-lead reveal" style="transition-delay:.1s">Не отработанные часы и не красивые отчёты. <strong>Четыре вещи, которые меняются в бизнесе.</strong></p>
+  </div>
+  <div class="results-grid">
+    <div class="result-card reveal">
+      <h3 class="result-title">Освобождённое <em>время</em></h3>
+      <p class="result-desc">Операционка, рутина и контроль уходят с вас. Остаётся то, ради чего вы строили бизнес&nbsp;— стратегия и рост.</p>
+    </div>
+    <div class="result-card reveal" style="transition-delay:.05s">
+      <h3 class="result-title">Закрытые <em>задачи</em></h3>
+      <p class="result-desc">Без напоминаний, микроменеджмента и возврата на доработку. Поставили задачу&nbsp;— можете о ней забыть.</p>
+    </div>
+    <div class="result-card reveal" style="transition-delay:.1s">
+      <h3 class="result-title">Рост чистой <em>прибыли</em></h3>
+      <p class="result-desc">Нахожу, где бизнес теряет деньги, и устраняю. Моя цель&nbsp;— не закрытые задачи сами по себе, а ваша прибыль.</p>
+    </div>
+    <div class="result-card reveal" style="transition-delay:.15s">
+      <h3 class="result-title">Система вместо <em>хаоса</em></h3>
+      <p class="result-desc">Финансы, маркетинг и продажи&nbsp;— в одной картине. Решения принимаются по цифрам, а не на ощупь.</p>
+    </div>
+  </div>
+</section>
+
 <!-- OBJECTIONS -->
 <section id="objections" class="section-divider">
   <div class="obj-inner">
+    <span class="section-kicker reveal"><b>06</b> Сомнения</span>
     <span class="section-label reveal">Вы можете подумать...</span>
     <div>
       <div class="obj-item reveal">
@@ -1543,6 +1758,28 @@ footer {
         <div class="obj-q"><span class="obj-q-text">«Где гарантии результата?»</span><span class="obj-num">05</span></div>
         <div class="obj-answer"><div class="obj-answer-inner">Моя цель — ваша чистая прибыль. Именно с неё вы и платите. Я предлагаю начать с испытательного периода — вы видите результат прежде чем принимаете финальное решение.<br><br><strong>Вы ничего не теряете.</strong></div></div>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- САЙТ КАК КЕЙС -->
+<section id="site-case" class="section-divider">
+  <div class="site-case-box reveal">
+    <div>
+      <span class="section-kicker"><b>07</b> Ещё один кейс</span>
+      <h2 class="site-case-title">Этот сайт&nbsp;— <em>тоже моя работа</em></h2>
+      <p class="site-case-text">
+        Структура, тексты, дизайн, анимации и адаптация под все устройства&nbsp;— <strong>за один день, полностью через ИИ</strong>.
+        Без дизайнера, без верстальщика и без бюджета на разработку.
+      </p>
+      <p class="site-case-text">
+        Так я работаю с любой задачей: беру инструмент, разбираюсь с нуля и довожу до результата. <strong>Пример перед вами прямо сейчас.</strong>
+      </p>
+    </div>
+    <div class="site-case-stats">
+      <div class="site-case-stat"><b>1 день</b><span>от идеи до публикации</span></div>
+      <div class="site-case-stat"><b>0 ₽</b><span>на подрядчиков</span></div>
+      <div class="site-case-stat"><b>100%</b><span>адаптив под все экраны</span></div>
     </div>
   </div>
 </section>
